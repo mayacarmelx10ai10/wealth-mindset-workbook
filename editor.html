@@ -28,8 +28,9 @@ button.alt{background:var(--sand);color:var(--ink);border:1px solid #D9D3C6}
 button.sm{font-size:15px;padding:7px 14px;font-weight:400}
 .msg{max-width:1120px;margin:8px auto 0;font-size:16px;text-align:center;color:var(--mute);min-height:24px}
 .reset{margin-top:10px}
-.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;align-items:start;margin-top:10px}
-.steps{position:sticky;top:14px;display:flex;flex-direction:column;gap:6px}
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;align-items:start;margin-top:14px}
+.main section{margin-top:0}
+.steps{position:sticky;top:14px;margin-top:0;display:flex;flex-direction:column;gap:6px}
 .steps button{display:flex;align-items:center;gap:10px;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:11px 14px;font-size:16px;font-weight:400;text-align:start;width:100%}
 .steps button b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-size:13px;color:var(--mute)}
 .steps button:hover{border-color:var(--ink)}
@@ -93,14 +94,14 @@ const htmlToItem=h=>unbold(h).replace(/<small>/g,'\n').replace(/<\/small>/g,'').
 
 /* ---- הגדרת השדות ---- */
 const F=[
- {t:'המייל שלך',a:'#save',h:'אחרי שמילאת כתובת, מופיע ללקוחות בסוף החוברת כפתור "שליחה אליך". הוא פותח מייל מוכן אליך עם הקישור למילוי שלהם.',f:[
-  ['coach.email','כתובת המייל שלך','line'],['coach.label','כיתוב הכפתור','line'],['coach.cap','שורה מתחת לכפתור','line'],['coach.subject','נושא המייל','line'],['coach.body','פתיחת המייל','line']]},
  {t:'התפריט העליון',a:'#top',f:[['nav.0','פריט 1','line'],['nav.1','פריט 2','line'],['nav.2','פריט 3','line'],['nav.3','פריט 4','line'],['nav.4','פריט 5','line']]},
  {t:'ברוכים הבאים',a:'#welcome',h:'לפסקה חדשה משאירים שורה ריקה. הדגשה: **כך**.',f:[['welcome.h1','כותרת','line'],['welcome.lead','טקסט הפתיחה','paras'],['welcome.modeLabel','השאלה על אופן המילוי','line'],['welcome.coupleNote','הסבר למילוי כזוג','area']]},
  {t:'יעדים וחלומות',a:'#goals',f:[['goals.title','כותרת','line'],['goals.add','כיתוב כפתור ההוספה','line'],['goals.sub','הסבר מתחת לכותרת','area'],['goals.count','כמה יעדים להציג מראש','num'],['goals.first','היעד הראשון, מוכן מראש (אפשר להשאיר ריק)','line']]},
  {t:'מטרות נוכחיות',a:'#current',f:[['current.titleSingle','כותרת, ביחיד','line'],['current.titleCouple','כותרת, בזוג','line'],['current.howSingle','שאלה, ביחיד','line'],['current.howCouple','שאלה, בזוג','line']]},
  {t:'מעגל החיים',a:'#wheel',h:'הדגשה: **כך**.',f:[['wheel.title','כותרת','line'],['wheel.sub','הסבר מתחת לכותרת','area'],['wheel.imp','הוראה: כמה חשוב','bold'],['wheel.cur','הוראה: מצב קיים','bold'],['areas','התחומים בטבלה, תחום בכל שורה. הראשון הוא קבוע ואי אפשר לשנות אותו בחוברת. אפשר עד 14 תחומים, והלקוחות מוסיפים בעצמם.','areas'],['wheel.gapNote','הערה מתחת לתוצאות','area'],['wheel.key.0','תיבה צהובה: נקודה 1','area'],['wheel.key.1','תיבה צהובה: נקודה 2','area'],['wheel.keyNote','תיבה צהובה: טקסט סיום','area']]},
- {t:'סיכום ומה להכין לפגישה הבאה',a:'#summary',h:'שלוש השאלות מופיעות בניסוח ליחיד ובניסוח לזוג.',f:[['summary.title','כותרת','line'],['summary.single.0','שאלה 1, ביחיד','line'],['summary.single.1','שאלה 2, ביחיד','line'],['summary.single.2','שאלה 3, ביחיד','line'],['summary.couple.0','שאלה 1, בזוג','line'],['summary.couple.1','שאלה 2, בזוג','line'],['summary.couple.2','שאלה 3, בזוג','line'],['summary.prepTitle','כותרת "מה להכין"','line'],['summary.prepSub','הסבר','area'],['summary.prep.0','פריט 1 (שורות נוספות הופכות לשורות קטנות מתחתיו)','item'],['summary.prep.1','פריט 2','item'],['summary.prep.2','פריט 3','item'],['summary.prepNote','הערה בסוף','area']]}
+ {t:'סיכום ומה להכין לפגישה הבאה',a:'#summary',h:'שלוש השאלות מופיעות בניסוח ליחיד ובניסוח לזוג.',f:[['summary.title','כותרת','line'],['summary.single.0','שאלה 1, ביחיד','line'],['summary.single.1','שאלה 2, ביחיד','line'],['summary.single.2','שאלה 3, ביחיד','line'],['summary.couple.0','שאלה 1, בזוג','line'],['summary.couple.1','שאלה 2, בזוג','line'],['summary.couple.2','שאלה 3, בזוג','line'],['summary.prepTitle','כותרת "מה להכין"','line'],['summary.prepSub','הסבר','area'],['summary.prep.0','פריט 1 (שורות נוספות הופכות לשורות קטנות מתחתיו)','item'],['summary.prep.1','פריט 2','item'],['summary.prep.2','פריט 3','item'],['summary.prepNote','הערה בסוף','area']]},
+ {t:'המייל שלך',a:'#save',h:'אחרי שמילאת כתובת, מופיע ללקוחות בסוף החוברת כפתור "שליחה אליך". הוא פותח מייל מוכן אליך עם הקישור למילוי שלהם.',f:[
+  ['coach.email','כתובת המייל שלך','line'],['coach.label','כיתוב הכפתור','line'],['coach.cap','שורה מתחת לכפתור','line'],['coach.subject','נושא המייל','line'],['coach.body','פתיחת המייל','line']]}
 ];
 
 const get=(o,p)=>p.split('.').reduce((x,k)=>x==null?x:x[k],o);
