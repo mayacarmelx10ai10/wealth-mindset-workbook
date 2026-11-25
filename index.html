@@ -1,0 +1,501 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>חוברת עבודה - מיינדסט של עשירים</title>
+<link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" crossorigin="anonymous">
+<style>
+:root{--bg:#FAF8F4;--hair:#E4DFD3;--sand:#EFE9DC;--sand-2:#F4F0E7;--ink:#14161B;--sky:#4D7CFF;--pink:#E2718A;--line:#E4DFD3;--mute:#5E5A52;
+--violet-s:#DDD3FF;--sky-s:#BBD6FF;--pink-s:#FBD9E1;--sun-s:#FFE9B0;--amber:#F5A623;--amber-s:#FFF4DC;--blue-s:#E3ECFF}
+*{box-sizing:border-box;margin:0;padding:0;font-family:Alef,sans-serif}
+i[class^="ri-"]{font-family:remixicon!important}
+body{background:var(--bg);color:var(--ink);line-height:1.65;font-size:18px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.wrap{max-width:720px;margin:0 auto;padding:0 20px 90px}
+/* ניווט */
+nav{position:sticky;top:0;z-index:5;background:rgba(250,248,244,.96);backdrop-filter:blur(8px)}
+nav .in{max-width:720px;margin:0 auto;display:flex;gap:4px;padding:10px 20px 8px;overflow-x:auto;scrollbar-width:none}
+nav .in::-webkit-scrollbar{display:none}
+nav a{flex:none;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--mute);font-size:15px;padding:6px 14px 6px 12px;border-radius:99px;transition:background .15s,color .15s,box-shadow .15s;cursor:pointer}
+nav a b{width:22px;height:22px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-size:12px;color:var(--mute)}
+nav a:hover{background:var(--sand);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line)}
+nav a:focus-visible{outline:2px solid var(--ink);outline-offset:1px}
+nav a.on{background:var(--ink);color:#fff;font-weight:700;box-shadow:none}
+nav a.on b{background:#fff;color:var(--ink)}
+#bar{height:3px;background:var(--line)}#bar i{display:block;height:100%;width:0;background:var(--ink);transition:width .15s}
+/* כותרות */
+section{background:#fff;border-radius:28px;padding:26px 22px;margin-top:16px;box-shadow:0 6px 20px rgba(0,0,0,.05);scroll-margin-top:64px}
+h1{font-size:34px;font-weight:700;line-height:1.25}
+h2{font-size:26px;font-weight:700;margin-bottom:4px;line-height:1.3}
+h2.s2{font-size:22px;margin-top:44px}
+.sub{color:var(--mute);font-size:17px;margin-bottom:18px}
+.lead p{margin:0 0 12px}
+.save{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--mute);margin-top:6px}
+.save::before,.dot{content:"";width:8px;height:8px;border-radius:50%;background:#2E9E57;flex:none}
+.dot{display:inline-block}
+/* שדות */
+label,.lb{display:block;font-size:16px;color:var(--mute);margin:0 2px 4px}
+input[type=text],input[type=date],textarea,select{width:100%;border:1px solid var(--hair);border-radius:14px;padding:10px 14px;font-size:18px;background:#fff;color:var(--ink);outline:2px solid transparent;transition:outline-color .15s}
+input:focus,textarea:focus,select:focus{outline-color:var(--ink)}
+::placeholder{color:#A9A6C4}
+textarea{min-height:80px;resize:vertical}
+select{appearance:none;-webkit-appearance:none;padding-inline-end:30px;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5l5 5 5-5' fill='none' stroke='%236E6A8F' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:left 12px center}
+input.num{width:64px;text-align:center;padding:9px 2px;font-weight:700;font-size:18px}
+select.impsel{width:76px;padding:10px 6px 10px 26px;font-weight:700;font-size:18px;text-align:center;text-align-last:center;background-position:left 9px center}
+input.num.imp{background:var(--amber-s);border:2px solid var(--amber)}
+input.num.cur{background:var(--blue-s);border:2px solid var(--sky)}
+input.num:disabled{opacity:.35}
+.dt{display:flex;gap:6px}.dt select:first-child{min-width:122px}.dt select:last-child{min-width:96px}
+.modebox{margin-top:22px;padding:16px 18px;background:var(--sand-2);border-radius:20px}
+.modebox .lb{font-size:15px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.seg{display:inline-flex;flex-wrap:wrap;border:1px solid var(--hair);border-radius:999px;padding:3px;background:#fff}
+.seg button{border:0;background:none;padding:10px 20px;border-radius:999px;font-size:16px;font-weight:700;display:inline-flex;gap:8px;align-items:center;cursor:pointer;color:var(--ink)}
+.seg button:hover{background:var(--sand-2)}
+.seg button.on{background:var(--ink);color:#fff}
+.seg.sm button{padding:7px 16px;font-size:15px}
+.seg.xs{padding:2px;flex-wrap:nowrap}
+.seg.xs button{padding:2px 11px;font-size:13.5px;line-height:1.5;white-space:nowrap}
+.couple{display:none}.is-couple .couple{display:block}
+.names{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+/* יעדים */
+.goal{padding:20px 0;border-top:1px solid var(--line)}
+.goal:first-child{border-top:0;padding-top:6px}
+.lrow{display:flex;align-items:center;flex-wrap:wrap;gap:4px 10px;margin-bottom:4px;min-height:24px}
+.lrow label{margin:0;white-space:nowrap}
+.g1{display:flex;gap:12px;align-items:flex-end}
+.g1 .gd{flex:1}
+.n{width:32px;height:32px;border-radius:50%;background:var(--violet-s);color:var(--ink);display:grid;place-items:center;font-weight:700;flex:none;margin-bottom:3px}
+.g2{display:flex;flex-wrap:wrap;gap:14px 12px;margin-top:14px;align-items:flex-end}
+.money{display:flex;direction:ltr;align-items:center;gap:8px;border:1px solid var(--hair);border-radius:14px;background:#fff;padding-left:7px}
+.money .cur{width:30px;height:30px;background:none;display:grid;place-items:center;font-weight:700;font-size:17px;color:var(--ink);flex:none}
+.money input{border:0;background:transparent;outline:0;padding:10px 12px 10px 0;text-align:left;flex:1;min-width:0}
+.money:focus-within{outline:2px solid var(--ink)}
+.g2 .c{width:184px}
+.yn{padding-bottom:2px}
+.note{display:none;margin-top:12px}
+.note.show{display:block}
+.lnk{margin-top:12px;background:var(--sand-2);border:1px solid var(--hair);border-radius:999px;padding:7px 16px 7px 14px;color:var(--ink);font-size:15px;font-weight:700;cursor:pointer;display:inline-flex;gap:6px;align-items:center;transition:background .15s}
+.lnk:hover{background:var(--sand)}
+.trash{margin-inline-start:auto;background:none;border:0;color:#D6453D;font-size:19px;cursor:pointer;padding:4px 6px;border-radius:10px;line-height:1;display:inline-flex}
+.trash:hover{background:#FBE9E7}.ttl .seg+.trash{margin-inline-start:2px}
+.addbtn{background:var(--ink);border:0;border-radius:999px;color:#fff;font-size:16px;font-weight:700;cursor:pointer;display:inline-flex;gap:8px;align-items:center;padding:9px 18px 9px 14px;white-space:nowrap}
+.addbtn i{font-size:22px;border-radius:50%;animation:pulse 1.8s ease-out 4}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(20,22,27,.45)}100%{box-shadow:0 0 0 12px rgba(20,22,27,0)}}
+.sh{position:sticky;top:var(--navh,64px);z-index:4;background:#fff;margin:-26px -22px 8px;padding:24px 22px 12px;border-radius:28px 28px 0 0;box-shadow:0 10px 10px -12px rgba(0,0,0,.2)}
+.shrow{display:flex;align-items:center;justify-content:space-between;gap:10px 12px;flex-wrap:wrap;margin-bottom:6px}
+.shrow h2{margin:0}
+.sh .sub{margin-bottom:0}
+section#save{background:none;box-shadow:none;padding:6px 0 0;margin-top:8px}
+
+/* מטרות */
+.tgc{padding:28px 0;border-top:1px solid var(--line)}.tgc:first-of-type{border-top:0;padding-top:12px}
+.tg{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-end;margin-top:6px}
+.tg .a{flex:1.5;min-width:180px}.tg .m{width:184px}
+.ttl .seg{margin-inline-start:auto}
+.goal .ttl{font-weight:700;margin-bottom:4px;display:flex;gap:10px;align-items:center}
+.tgc .ttl{font-weight:700;margin-bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+/* מעגל החיים */
+.steps{list-style:none;margin:6px 0 22px}
+.steps li{display:flex;gap:12px;align-items:flex-start;padding:8px 0}
+.steps li>i{flex:none;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;font-size:19px}
+.steps li.imp>i{background:var(--amber);color:#fff}
+.steps li.cur>i{background:var(--sky);color:#fff}
+.steps span{font-size:18px}
+.ptable+.ptable{margin-top:34px}
+.ptitle{font-size:20px;font-weight:700;margin:6px 0 2px}
+.thead,.arow{display:grid;grid-template-columns:1fr 72px 72px;gap:6px 8px;align-items:center}
+.thead{margin-top:10px;font-size:16px;color:var(--ink);text-align:center;align-items:end}
+.thead .hn{text-align:start;font-weight:700;color:var(--ink);font-size:16px}
+.thead .h{line-height:1.25;padding-bottom:6px;border-bottom:3px solid transparent}
+.thead .h.imp{border-color:var(--amber)}.thead .h.cur{border-color:var(--sky)}
+.thead .h i{display:block;font-size:20px}
+.thead .h.imp i{color:var(--amber)}.thead .h.cur i{color:var(--sky)}
+.arow{padding:7px 0;border-top:1px solid var(--line)}
+.an{display:flex;align-items:center;gap:10px;min-width:0}
+.ic{flex:none;width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-size:19px;color:var(--ink)}
+.arow.empty .ic{opacity:.4}
+.nmw{position:relative;flex:1;min-width:0}
+.nmw i{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#8F8BA8;font-size:16px;pointer-events:none}
+.nmw input{padding:9px 14px 9px 34px;font-size:18px;background:#fff;border-color:var(--line)}
+.nmw input:hover{border-color:#B9B3A2}
+.an b{font-weight:400;font-size:18px}
+.arow.fx{background:none}
+.lock{color:var(--ink);font-size:16px}
+.bigbtn{display:flex;justify-content:center;align-items:center;gap:10px;width:100%;margin-top:30px;border:0;border-radius:16px;padding:16px;font-size:18px;font-weight:700;background:var(--ink);color:#fff;cursor:pointer;box-shadow:none}
+#wheelOut{display:none;margin-top:30px}
+.wheels{display:grid;grid-template-columns:1fr;gap:26px}
+.is-couple .wheels{grid-template-columns:1fr 1fr;gap:14px}
+.wb svg{width:100%;height:auto;display:block}
+.wb svg text{direction:ltr}
+.wn{font-weight:700;font-size:20px;text-align:center}
+.legend{display:flex;gap:6px 18px;flex-wrap:wrap;justify-content:center;font-size:14px;color:var(--mute);margin:14px 0 4px}
+.legend i{display:inline-block;width:14px;height:6px;border-radius:3px;margin-inline-end:6px;vertical-align:2px}
+.legend i.f{height:12px;width:12px;border-radius:4px;vertical-align:-1px}
+.results{display:grid;gap:18px;grid-template-columns:1fr;margin-top:18px}
+.is-couple .results{grid-template-columns:1fr 1fr}
+.res h4{font-size:15px;margin:12px 0 6px}
+.res .wn{text-align:start;font-size:17px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;gap:5px;align-items:center;padding:2px 10px;border-radius:999px;background:var(--sand);font-size:13.5px;line-height:1.6}
+.chip i{font-size:14px}
+.chip.gap{background:var(--pink-s)}
+.chip em{font-style:normal;font-weight:700;margin-inline-start:2px}
+.mute{color:var(--mute);font-size:16px}
+.key{margin-top:28px;background:var(--sun-s);border-radius:20px;padding:20px 22px;font-weight:700;font-size:16px;line-height:1.6}
+.key ul{list-style:none;margin:0 0 12px}
+.key li{display:flex;gap:10px;align-items:flex-start;padding:4px 0}
+.key li i{color:var(--ink);font-size:19px;margin-top:1px;flex:none}
+.key p{margin:0}
+.two{display:grid;gap:18px;grid-template-columns:1fr}
+.two label.big,label.big{font-size:17px;color:var(--ink);font-weight:700;margin-top:16px}
+label.big:first-of-type{margin-top:0}
+/* סיכום */
+.prep{list-style:none;margin:10px 0}
+.prep li{padding:10px 0;border-top:1px solid var(--line);display:flex;gap:12px;align-items:flex-start}
+.prep li:first-child{border-top:0}
+.prep input{width:22px;height:22px;accent-color:var(--ink);margin-top:3px;flex:none}
+.prep small{display:block;color:var(--mute);font-size:15px}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.btn{border:0;border-radius:14px;padding:13px 22px;font-size:17px;font-weight:700;cursor:pointer;background:var(--ink);color:#fff;display:inline-flex;gap:8px;align-items:center}
+.btn.alt{background:var(--sand-2);color:var(--ink);border:1px solid var(--hair)}
+.btns{align-items:flex-start;gap:14px 12px}
+#save .btns{margin-top:0}
+.sv{display:flex;flex-direction:column;align-items:flex-start;gap:6px}
+.cap{font-size:14px;color:var(--mute);padding-inline-start:4px}
+.msg{display:none;gap:10px;align-items:center;margin-top:18px;padding:14px 18px;background:var(--sun-s);border-radius:16px;font-weight:700;font-size:16px}
+.msg.show{display:flex}
+.msg i{font-size:22px;flex:none}
+#toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:12px 22px;border-radius:99px;font-weight:700;opacity:0;pointer-events:none;transition:.25s;z-index:20}
+#toast.show{opacity:1;transform:translateX(-50%)}
+#stat{position:fixed;bottom:18px;left:18px;z-index:15;display:flex;gap:8px;align-items:center;background:#fff;border:1px solid var(--hair);box-shadow:0 6px 20px rgba(0,0,0,.08);border-radius:99px;padding:7px 16px 7px 12px;font-size:14px;font-weight:700;opacity:0;transform:translateY(8px);transition:.25s;pointer-events:none}
+#stat.show{opacity:1;transform:none}
+#stat i{color:#2E9E57;font-size:17px}
+@media(min-width:960px){.is-couple #wheelOut .wheels{width:calc(100% + 280px);margin-inline:-140px}}
+@media(max-width:640px){.is-couple .wheels{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:14px;padding-bottom:6px}.is-couple .wb{flex:0 0 88%;scroll-snap-align:center}.is-couple .results{grid-template-columns:1fr}}
+@media(max-width:560px){.thead,.arow{grid-template-columns:1fr 62px 62px;gap:6px}input.num{width:56px}.g2{padding-inline-start:0}.note,.lnk{margin-inline-start:0}.names{grid-template-columns:1fr}}
+@media print{nav,.noprint,.lnk,.addbtn,.bigbtn,.btns,#toast,#stat,.seg.xs button:not(.on){display:none!important}.wrap{max-width:none}section{padding:12px 0;box-shadow:none;margin:0;border-radius:0}.goal,.tgc,.wb,.key,.arow,.res{break-inside:avoid}.is-couple .wheels{display:grid;grid-template-columns:1fr 1fr;width:100%;margin-inline:0}.is-couple .wb{flex:none}.is-couple .results{grid-template-columns:1fr 1fr}.seg button:not(.on){display:none}}
+</style>
+</head>
+<body id="top">
+<nav><div class="in" id="nav">
+<a href="#welcome"><b>1</b>ברוכים הבאים</a><a href="#goals"><b>2</b>יעדים וחלומות</a><a href="#current"><b>3</b>מטרות נוכחיות</a><a href="#wheel"><b>4</b>מעגל החיים</a><a href="#summary"><b>5</b>סיכום ומה להכין לפגישה הבאה</a>
+</div><div id="bar"><i></i></div></nav>
+
+<div class="wrap">
+
+<section id="welcome">
+<h1>ברוכים הבאים</h1>
+<div class="save noprint">נשמר אוטומטית במכשיר הזה</div>
+<div class="lead" style="margin-top:20px">
+<p>לפני שנדבר על כסף, חשוב שנדבר על מה שהיינו רוצות להשיג באמצעותו.</p>
+<p>כסף הוא אמצעי, לא המטרה. הוא מאפשר לנו ליצור את החיים שאנחנו רוצות לעצמנו: להגשים חלומות, לממש רצונות, לבחור בחופשיות ולהרגיש ביטחון ועצמאות.</p>
+<p>כדי שנוכל ללמוד לנהל את הכסף שלנו בצורה שתשרת אותנו, אנחנו צריכות קודם כול לעצור ולשאול את עצמנו: לאן אנחנו רוצות להגיע? איך נראים החיים שאנחנו חולמות עליהם?</p>
+<p>קחו רגע לחלום בגדול, לדמיין, להרגיש ולכתוב. בשלב הזה אנחנו מתמקדות ב״מה״ ולא ב״איך״. את הדרך לשם נבנה יחד בהמשך.</p>
+<p>כי כשברור לנו לאן אנחנו רוצות להגיע, קל יותר להבין איך הכסף יכול לעזור לנו להגיע לשם.</p>
+</div>
+<div class="modebox noprint"><div class="lb">איך ממלאים את השאלון?</div>
+<div class="seg" id="mode"><button data-mode="0"><i class="ri-user-fill"></i>יחיד</button><button data-mode="1"><i class="ri-group-fill"></i>אנחנו ממלאים כזוג</button></div></div>
+<div class="couple">
+<div class="names"><div><label>שם ראשון</label><input type="text" data-k="n.a" placeholder="למשל: מאיה"></div><div><label>שם שני</label><input type="text" data-k="n.b" placeholder="למשל: דן"></div></div>
+<p class="mute" style="margin-top:8px">בכל אחת משתי המטרות בוחרים של מי היא. במעגל החיים לכל אחד טבלה משלו, ובסוף רואים את שני הגלגלים זה ליד זה. הסיכום משותף.</p>
+</div>
+</section>
+
+<section id="goals">
+<div class="sh"><div class="shrow"><h2>יעדים וחלומות</h2><button class="addbtn noprint" id="addGoal"><i class="ri-heart-add-fill"></i>הוספת יעד/חלום</button></div>
+<p class="sub" id="goalsSub"></p></div>
+<div id="goalList"></div>
+</section>
+
+<section id="current">
+<h2 id="curTitle"></h2>
+<div id="topGoals"></div>
+</section>
+
+<section id="wheel">
+<h2>מעגל החיים</h2>
+<p class="sub">מעגל החיים יעזור לנו לבטא, מאוחר יותר, את התיעדוף שלנו בתקציב היומיומי ובתכנון קדימה.</p>
+<ul class="steps">
+<li class="imp"><i class="ri-star-fill"></i><span><b>כמה חשוב:</b> מספר מ-1 עד 10. <b>10</b> = חשוב לי מאוד, ואני רואה ערך גדול בהשקעה בתחום. <b>1</b> = לא חשוב לי, ואין צורך להשקיע בו.</span></li>
+<li class="cur"><i class="ri-emotion-happy-fill"></i><span><b>מצב קיים:</b> מספר מ-1 עד 10 על מידת שביעות הרצון שלכם מהתפקוד שלכם בתחום, בלי קשר לתחומים אחרים.</span></li>
+</ul>
+<div id="tables"></div>
+<button class="bigbtn noprint" id="gen"><i class="ri-donut-chart-fill"></i><span id="genTxt">יצירת גלגל החיים</span></button>
+
+<div id="wheelOut">
+<div class="wheels" id="wheels"></div>
+<div class="legend"><span><i style="background:var(--amber)"></i>כמה חשוב</span><span><i style="background:var(--sky)"></i>מצב קיים</span><span><i class="f" style="background:#DDD3FF"></i>הטווח ביניהם</span><span><i class="f" style="background:#F6BFCC;box-shadow:inset 0 0 0 1px var(--pink)"></i>פער גדול</span></div>
+<div class="results" id="results"></div>
+<p class="mute" id="gapNote" style="display:none;text-align:center;margin-top:18px">נראה כי אלו התחומים שגורמים לאי נוחות רבה. הנטייה הטבעית שלנו היא לצמצם פערים במקומות אלו, משום שאלו המקומות בהם אנחנו חווים שביעות רצון נמוכה באופן יומיומי ולכן שם נבחר להשקיע.</p>
+<div class="key">
+<ul>
+<li><i class="ri-checkbox-circle-fill"></i><span>תחומים שציינתם כחשובים יקבלו מענה בעת הכנת התקציב.</span></li>
+<li><i class="ri-checkbox-circle-fill"></i><span>פער מספרי גדול בין הנושא שחשוב לכם לרמת התפקוד שלכם בו מבטא את התחומים שהכי מפריעים לכם בחיים.</span></li>
+</ul>
+<p>מודל מעגל החיים מדגים את זכות הבחירה שיש לכם: לטפל ולהקצות זמן לנושאים הכי בוערים אצלכם בחיים, כך שהם יקבלו ביטוי גם בתקציב שלכם וגם במטרות שלכם.</p>
+</div>
+</div>
+</section>
+
+<section id="summary">
+<h2>סיכום ומה להכין לפגישה הבאה</h2>
+<div style="margin-top:14px">
+<label class="big" id="sl1">ההישגים שלי השבוע</label><textarea data-k="s.win"></textarea>
+<label class="big" id="sl2">איך אחגוג אותם?</label><textarea data-k="s.cel"></textarea>
+<label class="big" id="sl3">הקשיים שלי</label><textarea data-k="s.hard"></textarea>
+</div>
+
+<h2 class="s2">מה להכין לפגישה הבאה</h2>
+<p class="sub">לצורך הכנת השיקוף והתקציב תצטרכו את החומרים הבאים:</p>
+<ul class="prep">
+<li><input type="checkbox" data-k="p.1"><span>תדפיס תנועות בנק. חודשיים אחרונים מלאים.</span></li>
+<li><input type="checkbox" data-k="p.2"><span>תדפיס כרטיסי אשראי. חודשיים אחרונים מלאים.</span></li>
+<li><input type="checkbox" data-k="p.3"><span>פירוט הכנסות:
+<small>שכירים: תלוש שכר אחרון.</small><small>עצמאים: דו"ח רווח והפסד שנה קודמת.</small><small>הכנסות נוספות, קצבאות, עזרה מקרובי משפחה, שכירות וכדומה.</small></span></li>
+</ul>
+<p class="mute">את החומרים שהוצאתם יש לשמור אצלכם, לצורך ביצוע המשימה. אין צורך לשלוח מסמכים אלי. אני אקבל מכם את קובץ האקסל לאחר שתמלאו את הנתונים.</p>
+
+</section>
+
+<section id="save" class="noprint">
+<div class="btns">
+<div class="sv"><button class="btn" id="link"><i class="ri-global-fill"></i>שמירת הקובץ כקישור</button><div class="cap">מאפשר לחזור ולהמשיך</div></div>
+<div class="sv"><button class="btn alt" id="pdf"><i class="ri-file-pdf-2-fill"></i>שמירה כ-PDF</button><div class="cap">עותק לקריאה והדפסה</div></div>
+</div>
+<div class="msg noprint" id="linkMsg"></div>
+</section>
+</div>
+<div id="toast"></div>
+<div id="stat"><i class="ri-checkbox-circle-fill"></i>נשמר</div>
+
+<script>
+const KEY='booklet-mock-v4';
+let S={};try{S=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
+if(S['g.0.d']===undefined&&S.goalsN===undefined)S['g.0.d']='חופש כלכלי';
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let statT,statH;
+const flash=()=>{clearTimeout(statT);statT=setTimeout(()=>{const e=$('#stat');e.classList.add('show');clearTimeout(statH);statH=setTimeout(()=>e.classList.remove('show'),2000)},450)};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}flash()};
+const toast=t=>{const e=$('#toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>e.classList.remove('show'),2600)};
+const MONTHS=['ינואר','פברואר','מרץ','אפריל','מאי','יוני','יולי','אוגוסט','ספטמבר','אוקטובר','נובמבר','דצמבר'];
+const Y0=new Date().getFullYear();
+const dateSel=k=>`<div class="dt"><select data-k="${k}.m"><option value="">חודש</option>${MONTHS.map((m,i)=>`<option value="${i+1}">${m}</option>`).join('')}</select><select data-k="${k}.y"><option value="">שנה</option>${[...Array(16)].map((_,i)=>`<option>${Y0+i}</option>`).join('')}</select></div>`;
+const money=k=>`<div class="money"><span class="cur">₪</span><input type="text" class="amt" inputmode="numeric" data-k="${k}"></div>`;
+const DEF=[{id:0,name:'ניהול ההון האישי',icon:'ri-coin-fill',fixed:true},{id:1,name:'קריירה',icon:'ri-briefcase-4-fill'},{id:2,name:'ספורט',icon:'ri-basketball-fill'},{id:3,name:'הורות',icon:'ri-parent-fill'},{id:4,name:'זוגיות',icon:'ri-hearts-fill'},{id:5,name:'תזונה',icon:'ri-restaurant-fill'},{id:6,name:'משפחה',icon:'ri-group-fill'}];
+const MAXA=14; // מספר הפלחים באיור המקורי
+// לכל אחד רשימת תחומים משלו (בזוג: שתי טבלאות נפרדות)
+const areas=p=>{const k='areas.'+p;if(!S[k]){S[k]=JSON.parse(JSON.stringify(DEF));for(let i=DEF.length;i<MAXA;i++)S[k].push({id:i,name:'',icon:'ri-sparkling-fill'})}return S[k]};
+const named=p=>areas(p).filter(a=>a.name.trim());
+const BG=['#BBD6FF','#FFE49A','#DDD3FF','#E6D3F0'];
+const people=()=>S.couple?['a','b']:['a'];
+const pname=p=>S['n.'+p]||(p==='a'?'אני':'בן/בת הזוג');
+const sc=(t,p,id)=>{const v=parseInt(S['w.'+t+'.'+p+'.'+id]);return v>=1&&v<=10?v:0};
+
+/* ---- בוררים קטנים: של מי, כן/לא ---- */
+const owner=k=>(S.couple&&(S['n.a']||'').trim()&&(S['n.b']||'').trim())?`<div class="seg xs" data-own="${k}">${['a','b','s'].map(v=>`<button data-ov="${v}" class="${(S[k]||'s')===v?'on':''}">${v==='s'?'משותף':pname(v)}</button>`).join('')}</div>`:'';
+const yesno=k=>`<div class="seg sm" data-yn="${k}">${['כן','לא'].map(v=>`<button data-yv="${v}" class="${S[k]===v?'on':''}">${v}</button>`).join('')}</div>`;
+
+/* ---- יעדים ---- */
+function renderGoals(){
+  const n=S.goalsN||4,c=!!S.couple;
+  $('#goalsSub').textContent='כתבו את מה שאתם רוצים להגשים בעשור הקרוב. חשיבות: 10 = הכי חשוב, 1 = הכי פחות.';
+  $('#goalList').innerHTML=[...Array(n)].map((_,i)=>`<div class="goal">
+<div class="ttl"><div class="n">${i+1}</div><span>${c?'יעד/חלום':'יעד/חלום'}</span>${owner('g.'+i+'.o')}${n>1?`<button class="trash noprint" data-del="${i}" title="מחיקה" aria-label="מחיקה"><i class="ri-delete-bin-line"></i></button>`:''}</div>
+<div class="g1">
+<div class="gd"><div class="lrow"><label>${c?'תיאור היעד/החלום':'תיאור היעד/החלום'}</label></div><input type="text" data-k="g.${i}.d"></div>
+<div><div class="lrow"><label>חשיבות</label></div><select class="impsel" data-k="g.${i}.i"><option value="">–</option>${[...Array(10)].map((_,j)=>`<option>${j+1}</option>`).join('')}</select></div></div>
+<div class="g2"><div><label>מתי?</label>${dateSel('g.'+i+'.w')}</div>
+<div class="c"><label>עלות משוערת</label>${money('g.'+i+'.c')}</div>
+<div class="yn"><label>האם יש מקור כספי?</label>${yesno('g.'+i+'.s')}</div></div>
+<button class="lnk noprint" data-note="${i}"><i class="ri-add-circle-fill"></i>הוספת הערה</button>
+<div class="note ${(S['g.'+i+'.n']||S['g.'+i+'.sn'])?'show':''}"><textarea data-k="g.${i}.n" placeholder="הערות"></textarea></div></div>`).join('');
+}
+function renderTop(){
+  const c=!!S.couple;
+  $('#curTitle').textContent=c?'שתי המטרות הכי חשובות לנו כרגע':'שתי המטרות הכי חשובות לי כרגע';
+  $('#topGoals').innerHTML=[1,2].map(n=>`<div class="tgc"><div class="ttl"><div class="n">${n}</div><span>מטרה מס' ${n}</span>${owner('t'+n+'.o')}</div>
+<div class="tg"><div class="a"><label>שם המטרה</label><input type="text" data-k="t${n}.name"></div>
+<div><label>מתי?</label>${dateSel('t'+n+'.w')}</div>
+<div class="m"><label>כמה כסף?</label>${money('t'+n+'.money')}</div></div>
+<label style="margin-top:18px">${c?'מה עושים (או כבר עושים) כדי להוציא אותה לפועל?':'מה אני הולכ/ת לעשות / כבר עושה כדי להוציא אותה לפועל?'}</label><textarea data-k="t${n}.how"></textarea></div>`).join('');
+}
+
+/* ---- טבלאות תחומים: אחת לכל אחד ---- */
+function renderTables(){
+  $('#tables').innerHTML=people().map(p=>{
+    const A=areas(p);
+    let h=`<div class="ptable" data-p="${p}">${S.couple?`<div class="ptitle">${pname(p)}</div>`:''}`;
+    h+=`<div class="thead"><div class="hn">תחום</div><div class="h imp"><i class="ri-star-fill"></i>כמה חשוב</div><div class="h cur"><i class="ri-emotion-happy-fill"></i>מצב קיים</div></div>`;
+    A.forEach((a,i)=>{
+      const empty=!a.fixed&&!a.name.trim();
+      h+=`<div class="arow ${a.fixed?'fx':''} ${empty?'empty':''}"><div class="an">`+
+        (a.fixed?`<b>${a.name}</b><i class="ri-lock-fill lock" title="תחום קבוע"></i>`:`<div class="nmw"><input type="text" data-an="${p}:${a.id}" placeholder="תחום נוסף"><i class="ri-pencil-fill"></i></div>`)+
+        `</div><input type="text" class="num imp" inputmode="numeric" maxlength="2" data-k="w.imp.${p}.${a.id}" ${empty?'disabled':''}><input type="text" class="num cur" inputmode="numeric" maxlength="2" data-k="w.cur.${p}.${a.id}" ${empty?'disabled':''}></div>`;
+    });
+    return h+'</div>';
+  }).join('');
+  $$('[data-an]').forEach(e=>{const[p,id]=e.dataset.an.split(':');e.value=(areas(p).find(a=>a.id==id)||{}).name||''});
+}
+
+/* ---- גלגל ---- */
+const R=160,CX=320,CY=235;
+const pt=(r,a)=>[CX+r*Math.cos(a),CY+r*Math.sin(a)];
+const slice=(r,a0,a1)=>`M${CX},${CY}L${pt(r,a0)}A${r},${r} 0 0 1 ${pt(r,a1)}Z`;
+const ring=(r1,r2,a0,a1)=>`M${pt(r1,a0)}L${pt(r2,a0)}A${r2},${r2} 0 0 1 ${pt(r2,a1)}L${pt(r1,a1)}A${r1},${r1} 0 0 0 ${pt(r1,a0)}Z`;
+function calc(p){
+  const A=named(p);
+  const top3=A.filter(a=>sc('imp',p,a.id)>0).sort((x,y)=>sc('imp',p,y.id)-sc('imp',p,x.id)).slice(0,3);
+  const gap=a=>sc('imp',p,a.id)-sc('cur',p,a.id);
+  const gaps=A.filter(a=>sc('imp',p,a.id)>0&&sc('cur',p,a.id)>0&&gap(a)>0).sort((x,y)=>gap(y)-gap(x)).slice(0,2);
+  return{top3,gaps,gap};
+}
+function label(txt,x,y,anc,fs){
+  let lines=[txt];
+  if(txt.length>13){const mid=txt.length/2;let best=-1;[...txt].forEach((c,i)=>{if(c===' '&&(best<0||Math.abs(i-mid)<Math.abs(best-mid)))best=i});if(best>0)lines=[txt.slice(0,best),txt.slice(best+1)]}
+  const lh=fs+3,y0=y+fs*.32-(lines.length-1)*lh/2;
+  return `<text text-anchor="${anc}" font-size="${fs}" font-weight="700" fill="#14161B" style="paint-order:stroke;stroke:#fff;stroke-width:${fs/4}px">${lines.map((l,i)=>`<tspan x="${x}" y="${y0+i*lh}">${l}</tspan>`).join('')}</text>`;
+}
+function wheelSVG(p,f){
+  const A=named(p),n=Math.max(A.length,3),{gaps}=calc(p);let h='';
+  A.forEach((a,i)=>{
+    const a0=-Math.PI/2+i*2*Math.PI/n,a1=a0+2*Math.PI/n,am=(a0+a1)/2;
+    h+=`<path d="${slice(R,a0,a1)}" fill="#fff" stroke="#A8A292" stroke-width="2"/>`;
+    const imp=R*sc('imp',p,a.id)/10*f,cur=R*sc('cur',p,a.id)/10*f;
+    // הפלח מתמלא רק בין שני המספרים (הטווח), לא מהמרכז
+    if(imp&&cur&&Math.abs(imp-cur)>0.5){const top=gaps.includes(a);h+=`<path d="${ring(Math.min(imp,cur),Math.max(imp,cur),a0,a1)}" fill="${top?'#F6BFCC':'#DDD3FF'}"${top?' stroke="#E2718A" stroke-width="1"':''}/>`}
+    // כל מספר הוא סימן (קשת) במקום שלו
+    if(imp)h+=`<path d="${ring(Math.max(imp-7,0),imp,a0,a1)}" fill="#F5A623"/>`;
+    if(cur)h+=`<path d="${ring(Math.max(cur-7,0),cur,a0,a1)}" fill="#4D7CFF"/>`;
+    const c=Math.cos(am),[lx,ly]=pt(R+16,am);
+    h+=label(a.name,lx,ly,Math.abs(c)<.2?'middle':(c>0?'start':'end'),S.couple?25:17);
+  });
+  return `<svg viewBox="0 0 640 470">${h}<circle cx="${CX}" cy="${CY}" r="${R}" fill="none" stroke="#14161B" stroke-width="2.5"/></svg>`;
+}
+function chips(list,fn,cls){return `<div class="chips">${list.map(a=>`<span class="chip ${cls||''}">${a.name}<em>${fn(a)}</em></span>`).join('')}</div>`}
+function paintWheels(f){
+  $('#wheels').innerHTML=people().map(p=>`<div class="wb">${S.couple?`<div class="wn">${pname(p)}</div>`:''}${wheelSVG(p,f)}</div>`).join('');
+}
+function paintResults(){
+  let anyGap=false;const c=!!S.couple;
+  const html=people().map(p=>{
+    const{top3,gaps,gap}=calc(p);if(gaps.length)anyGap=true;
+    const t=top3.length?`<h4>${c?'3 התחומים הכי חשובים':'3 התחומים הכי חשובים לי'}</h4>${chips(top3,a=>sc('imp',p,a.id))}`:'';
+    const g=gaps.length?`<h4>שני התחומים עם הפער הגדול ביותר</h4>${chips(gaps,a=>'פער '+gap(a),'gap')}`:'';
+    return (t||g)?`<div class="res">${c?`<div class="wn">${pname(p)}</div>`:''}${t}${g}</div>`:'';
+  }).join('');
+  $('#results').innerHTML=html;$('#results').style.display=html?'grid':'none';
+  $('#gapNote').style.display=anyGap?'':'none';
+}
+function genWheel(animate){
+  S.gen=true;save();$('#wheelOut').style.display='block';$('#genTxt').textContent='עדכון גלגל החיים';paintResults();
+  if(!animate){paintWheels(1);return}
+  paintWheels(0);const t0=performance.now();
+  const step=t=>{const f=Math.min(1,(t-t0)/900);paintWheels(1-Math.pow(1-f,3));if(f<1)requestAnimationFrame(step)};
+  requestAnimationFrame(step);setTimeout(()=>paintWheels(1),1100);
+}
+
+/* ---- כללי ---- */
+function fillValues(){
+  $$('[data-k]').forEach(e=>{if(document.activeElement===e)return;const v=S[e.dataset.k];if(e.type==='checkbox')e.checked=!!v;else e.value=v==null?'':v});
+}
+function renderSummaryLabels(){
+  const c=!!S.couple;
+  $('#sl1').textContent=c?'ההישגים שלנו השבוע':'ההישגים שלי השבוע';
+  $('#sl2').textContent=c?'איך נחגוג אותם?':'איך אחגוג אותם?';
+  $('#sl3').textContent=c?'הקשיים שלנו':'הקשיים שלי';
+}
+function renderAll(){
+  document.body.classList.toggle('is-couple',!!S.couple);
+  $$('#mode button').forEach(b=>b.classList.toggle('on',(b.dataset.mode==='1')===!!S.couple));
+  renderGoals();renderTop();renderTables();renderSummaryLabels();fillValues();
+  if(S.gen){$('#wheelOut').style.display='block';$('#genTxt').textContent='עדכון גלגל החיים';paintResults();paintWheels(1)}
+}
+document.addEventListener('input',e=>{
+  const el=e.target;
+  if(el.dataset.k){S[el.dataset.k]=el.type==='checkbox'?el.checked:el.value;save();if(el.dataset.k.startsWith('n.')){renderGoals();renderTop();renderTables();fillValues();if(S.gen){paintResults();paintWheels(1)}}return}
+  if(el.dataset.an!==undefined){
+    const[p,id]=el.dataset.an.split(':'),a=areas(p).find(x=>x.id==id);if(!a)return;a.name=el.value;save();
+    const has=!!el.value.trim(),row=el.closest('.arow');row.classList.toggle('empty',!has);row.querySelectorAll('input.num').forEach(x=>x.disabled=!has);
+  }
+});
+document.addEventListener('change',e=>{
+  const el=e.target;
+  if(el.classList.contains('amt')){const d=el.value.replace(/\D/g,'');el.value=d?(+d).toLocaleString('en-US'):'';S[el.dataset.k]=el.value;save();return}
+  if(el.classList.contains('num')){const v=parseInt(el.value);el.value=v>=1?Math.min(v,10):'';S[el.dataset.k]=el.value;save()}
+});
+document.addEventListener('click',e=>{
+  const md=e.target.closest('[data-mode]');
+  if(md){S.couple=md.dataset.mode==='1';save();renderAll();return}
+  const ob=e.target.closest('[data-ov]');
+  if(ob){const g=ob.parentElement;S[g.dataset.own]=ob.dataset.ov;save();g.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b===ob));return}
+  const yb=e.target.closest('[data-yv]');
+  if(yb){const g=yb.parentElement,k=g.dataset.yn;S[k]=S[k]===yb.dataset.yv?'':yb.dataset.yv;save();g.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.yv===S[k]));return}
+  const db=e.target.closest('[data-del]');
+  if(db){const i=+db.dataset.del,n=S.goalsN||4;
+    if(!confirm('למחוק את היעד/החלום מספר '+(i+1)+'?'))return;
+    const sub=['d','i','w.m','w.y','c','s','n','sn','o'];
+    for(let j=i;j<n;j++)sub.forEach(f=>{const nx='g.'+(j+1)+'.'+f,cu='g.'+j+'.'+f;if(S[nx]!==undefined&&j+1<n)S[cu]=S[nx];else delete S[cu]});
+    S.goalsN=Math.max(1,n-1);save();renderGoals();fillValues();return}
+  const nb=e.target.closest('[data-note]');
+  if(nb){const box=nb.nextElementSibling;box.classList.toggle('show');S['g.'+nb.dataset.note+'.sn']=box.classList.contains('show');save();if(box.classList.contains('show'))box.querySelector('textarea').focus()}
+});
+$('#addGoal').onclick=()=>{S.goalsN=(S.goalsN||4)+1;save();renderGoals();fillValues();$$('#goalList .goal').pop().querySelector('input[type=text]').focus()};
+$('#gen').onclick=()=>{genWheel(true);$('#wheelOut').scrollIntoView({behavior:'smooth',block:'start'})};
+let liveT;const live=()=>{if(!S.gen)return;clearTimeout(liveT);liveT=setTimeout(()=>{paintResults();paintWheels(1)},120)};
+['input','change','click'].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest('#table,[data-an]'))live()}));
+$('#pdf').onclick=()=>{if(S.gen)paintWheels(1);print()};
+
+/* ---- קישור לחזרה: כל המילוי בתוך הקישור (נשאר אצל המשתמשת, לא נשלח לשרת) ---- */
+const b64=u=>{let s='';for(let i=0;i<u.length;i+=8000)s+=String.fromCharCode(...u.subarray(i,i+8000));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+const unb64=t=>Uint8Array.from(atob(t.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));
+async function pack(obj){
+  const raw=new TextEncoder().encode(JSON.stringify(obj));
+  if(typeof CompressionStream==='undefined')return 'r'+b64(raw);
+  const z=new Uint8Array(await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('deflate-raw'))).arrayBuffer());
+  return 'z'+b64(z);
+}
+async function unpack(str){
+  let u=unb64(str.slice(1));
+  if(str[0]==='z')u=new Uint8Array(await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer());
+  return JSON.parse(new TextDecoder().decode(u));
+}
+$('#link').onclick=async()=>{
+  const url=location.href.split('#')[0]+'#d='+await pack(S);
+  let copied=false;
+  try{await navigator.clipboard.writeText(url);copied=true}catch(e){}
+  const m=$('#linkMsg');
+  m.innerHTML='<i class="ri-mail-send-fill"></i><span>'+(copied?'הקישור הועתק. ':'')+'עכשיו שלחו אותו לעצמכם, למשל ב-WhatsApp או במייל.</span>';
+  m.classList.add('show');
+  if(!copied){prompt('העתיקו את הקישור ושלחו אותו לעצמכם:',url);return}
+  if(navigator.share){try{await navigator.share({title:'החוברת שלי - מיינדסט של עשירים',url})}catch(e){}}
+};
+async function loadFromHash(){
+  if(!location.hash.startsWith('#d='))return;
+  try{
+    const data=await unpack(location.hash.slice(3));
+    const has=Object.keys(S).length>0;
+    if(!has||confirm('נמצא מילוי שמור בקישור. להחליף את המילוי שבמכשיר הזה?')){S=data;save();toast('המילוי נטען מהקישור')}
+  }catch(e){toast('הקישור לא תקין')}
+  history.replaceState(null,'',location.href.split('#')[0]);
+}
+
+/* ---- ניווט: איפה אני ---- */
+const SEC=['welcome','goals','current','wheel','summary'];let lastActive=-1;
+function spy(){
+  const y=window.scrollY+140;let cur=0;
+  SEC.forEach((id,i)=>{if($('#'+id).getBoundingClientRect().top+window.scrollY<=y)cur=i});
+  if(window.innerHeight+window.scrollY>=document.body.scrollHeight-4)cur=SEC.length-1;
+  $$('#nav a').forEach((a,i)=>a.classList.toggle('on',i===cur));
+  if(cur!==lastActive){lastActive=cur;
+    const nv=$('#nav'),a=$$('#nav a')[cur],mx=nv.scrollWidth-nv.clientWidth;
+    nv.scrollTo({left:Math.max(-mx,Math.min(0,a.offsetLeft+a.offsetWidth/2-nv.scrollWidth+nv.clientWidth/2)),behavior:'smooth'})}
+  const max=document.body.scrollHeight-window.innerHeight;$('#bar i').style.width=(max>0?window.scrollY/max*100:0)+'%';
+}
+const setNav=()=>document.documentElement.style.setProperty('--navh',$('nav').offsetHeight+'px');
+addEventListener('scroll',spy,{passive:true});addEventListener('resize',()=>{setNav();spy()});
+addEventListener('beforeprint',()=>{if(S.gen)paintWheels(1)});
+(async()=>{await loadFromHash();renderAll();setNav();spy()})();
+</script>
+</body>
+</html>
