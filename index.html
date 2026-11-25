@@ -20,7 +20,9 @@ i[class^="ri-"]{font-family:remixicon!important}
 body{background:var(--bg);color:var(--ink);line-height:1.65;font-size:18px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
 .wrap{max-width:720px;margin:0 auto;padding:0 20px 90px}
 /* ניווט */
-nav{position:sticky;top:0;z-index:5;background:rgba(250,248,244,.96);backdrop-filter:blur(8px)}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;background:rgba(250,248,244,.98);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+body{padding-top:var(--navh,58px)}
+#wheelOut{scroll-margin-top:70px}
 nav .in{max-width:720px;margin:0 auto;display:flex;gap:4px;padding:10px 20px 8px;overflow-x:auto;scrollbar-width:none}
 nav .in::-webkit-scrollbar{display:none}
 nav a{flex:none;display:flex;align-items:center;gap:8px;text-decoration:none;color:var(--mute);font-size:15px;padding:6px 14px 6px 12px;border-radius:99px;transition:background .15s,color .15s,box-shadow .15s;cursor:pointer}
@@ -78,7 +80,7 @@ input.num:disabled{opacity:.35}
 .money input{border:0;background:transparent;outline:0;padding:10px 12px 10px 0;text-align:left;flex:1;min-width:0}
 .money:focus-within{outline:2px solid var(--ink)}
 .g2 .c{width:184px}
-.yn{padding-bottom:2px}
+.yn{padding-bottom:2px;margin-inline-start:auto}
 .note{display:none;margin-top:12px}
 .note.show{display:block}
 .lnk{margin-top:12px;background:var(--sand-2);border:1px solid var(--hair);border-radius:999px;padding:7px 16px 7px 14px;color:var(--ink);font-size:15px;font-weight:700;cursor:pointer;display:inline-flex;gap:6px;align-items:center;transition:background .15s}
@@ -257,6 +259,7 @@ label.big:first-of-type{margin-top:0}
 <section id="save" class="noprint">
 <div class="btns">
 <div class="sv"><button class="btn" id="link"><i class="ri-global-fill"></i>שמירת הקובץ כקישור</button><div class="cap">מאפשר לחזור ולהמשיך</div></div>
+<div class="sv" id="sendBox" style="display:none"><button class="btn" id="sendCoach"><i class="ri-send-plane-fill"></i><span id="sendLbl"></span></button><div class="cap" id="sendCap"></div></div>
 <div class="sv"><button class="btn alt" id="pdf"><i class="ri-file-pdf-2-fill"></i>שמירה כ-PDF</button><div class="cap">עותק לקריאה והדפסה</div></div>
 </div>
 <div class="msg noprint" id="linkMsg"></div>
@@ -268,16 +271,24 @@ label.big:first-of-type{margin-top:0}
 <script>
 const merge=(a,b)=>{if(Array.isArray(b)||typeof b!=='object'||b===null)return b===undefined?a:b;const o={...(a&&typeof a==='object'&&!Array.isArray(a)?a:{})};for(const k in b)o[k]=merge(o[k],b[k]);return o};
 if(!(window.VERSIONS&&VERSIONS[VER]))window.VER='default';
-const C=merge(VERSIONS.default,VER==='default'?{}:VERSIONS[VER]);
+let C=merge(VERSIONS.default,VER==='default'?{}:VERSIONS[VER]);
+const rawC=new URLSearchParams(location.search).get('c')||'';
+const hash=t=>{let h=5381;for(const ch of t)h=((h<<5)+h+ch.charCodeAt(0))|0;return (h>>>0).toString(36)};
 const cget=(o,p)=>p.split('.').reduce((x,k)=>x==null?x:x[k],o);
+function applyCoach(){
+  const k=C.coach||{},on=!!(k.email&&k.email.trim());
+  $('#sendBox').style.display=on?'':'none';
+  $('#sendLbl').textContent=k.label||'שליחה למאמן/ת';
+  $('#sendCap').textContent=k.cap||'נפתח מייל מוכן עם הקישור למילוי';
+}
 function applyContent(){
+  applyCoach();
   document.title=C.title;
   $$('[data-c]').forEach(e=>{const v=cget(C,e.dataset.c);if(v!=null)e.innerHTML=v});
   $('#prep').innerHTML=C.summary.prep.map((t,i)=>`<li><input type="checkbox" data-k="p.${i+1}"><span>${t}</span></li>`).join('');
 }
-const KEY=VER==='default'?'booklet-mock-v4':'booklet-'+VER+'-v1';
+const KEY=rawC?'booklet-c-'+hash(rawC)+'-v1':VER==='default'?'booklet-mock-v4':'booklet-'+VER+'-v1';
 let S={};try{S=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
-if(S['g.0.d']===undefined&&S.goalsN===undefined&&C.goals.first)S['g.0.d']=C.goals.first;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 let statT,statH;
 const flash=()=>{clearTimeout(statT);statT=setTimeout(()=>{const e=$('#stat');e.classList.add('show');clearTimeout(statH);statH=setTimeout(()=>e.classList.remove('show'),2000)},450)};
@@ -287,7 +298,7 @@ const MONTHS=['ינואר','פברואר','מרץ','אפריל','מאי','יונ
 const Y0=new Date().getFullYear();
 const dateSel=k=>`<div class="dt"><select data-k="${k}.m"><option value="">חודש</option>${MONTHS.map((m,i)=>`<option value="${i+1}">${m}</option>`).join('')}</select><select data-k="${k}.y"><option value="">שנה</option>${[...Array(16)].map((_,i)=>`<option>${Y0+i}</option>`).join('')}</select></div>`;
 const money=k=>`<div class="money"><span class="cur">₪</span><input type="text" class="amt" inputmode="numeric" data-k="${k}"></div>`;
-const DEF=C.areas.map((a,i)=>({id:i,...a}));
+let DEF=C.areas.map((a,i)=>({id:i,...a}));
 const MAXA=14; // מספר הפלחים באיור המקורי
 // לכל אחד רשימת תחומים משלו (בזוג: שתי טבלאות נפרדות)
 const areas=p=>{const k='areas.'+p;if(!S[k]){S[k]=JSON.parse(JSON.stringify(DEF));for(let i=DEF.length;i<MAXA;i++)S[k].push({id:i,name:'',icon:'ri-sparkling-fill'})}return S[k]};
@@ -401,8 +412,18 @@ function genWheel(animate){
 }
 
 /* ---- כללי ---- */
+const NOW=new Date(),NY=NOW.getFullYear(),NM=NOW.getMonth()+1;
+function fixDates(){
+  $$('.dt').forEach(d=>{
+    const [m,y]=d.querySelectorAll('select');if(!m||!y)return;
+    const cur=y.value==String(NY);
+    if(cur&&m.value&&+m.value<NM){m.value='';if(m.dataset.k){delete S[m.dataset.k];save()}}
+    [...m.options].forEach(o=>{o.disabled=cur&&o.value!==''&&+o.value<NM});
+  });
+}
 function fillValues(){
   $$('[data-k]').forEach(e=>{if(document.activeElement===e)return;const v=S[e.dataset.k];if(e.type==='checkbox')e.checked=!!v;else e.value=v==null?'':v});
+  fixDates();
 }
 function renderSummaryLabels(){
   const c=!!S.couple;
@@ -426,6 +447,7 @@ document.addEventListener('input',e=>{
 });
 document.addEventListener('change',e=>{
   const el=e.target;
+  if(el.closest&&el.closest('.dt'))setTimeout(fixDates,0);
   if(el.classList.contains('amt')){const d=el.value.replace(/\D/g,'');el.value=d?(+d).toLocaleString('en-US'):'';S[el.dataset.k]=el.value;save();return}
   if(el.classList.contains('num')){const v=parseInt(el.value);el.value=v>=1?Math.min(v,10):'';S[el.dataset.k]=el.value;save()}
 });
@@ -475,6 +497,18 @@ $('#link').onclick=async()=>{
   if(!copied){prompt('העתיקו את הקישור ושלחו אותו לעצמכם:',url);return}
   if(navigator.share){try{await navigator.share({title:'החוברת שלי - מיינדסט של עשירים',url})}catch(e){}}
 };
+$('#sendCoach').onclick=async()=>{
+  const k=C.coach||{};if(!k.email)return;
+  const url=location.href.split('#')[0]+'#d='+await pack(S);
+  const enc=encodeURIComponent,subj=k.subject||C.title;
+  let body=(k.body||'שלום, זה המילוי שלי בחוברת:')+'\n\n'+url;
+  let href='mailto:'+k.email.trim()+'?subject='+enc(subj)+'&body='+enc(body);
+  if(href.length>1900){
+    try{await navigator.clipboard.writeText(url);toast('הקישור הועתק. הדביקו אותו במייל.')}catch(e){prompt('העתיקו את הקישור והדביקו אותו במייל:',url)}
+    href='mailto:'+k.email.trim()+'?subject='+enc(subj)+'&body='+enc((k.body||'שלום, זה המילוי שלי בחוברת:')+'\n\n(הדביקו כאן את הקישור שהועתק)');
+  }
+  location.href=href;
+};
 async function loadFromHash(){
   if(!location.hash.startsWith('#d='))return;
   try{
@@ -500,7 +534,11 @@ function spy(){
 const setNav=()=>document.documentElement.style.setProperty('--navh',$('nav').offsetHeight+'px');
 addEventListener('scroll',spy,{passive:true});addEventListener('resize',()=>{setNav();spy()});
 addEventListener('beforeprint',()=>{if(S.gen)paintWheels(1)});
-(async()=>{await loadFromHash();renderAll();setNav();spy()})();
+async function loadCfg(){
+  if(!rawC)return;
+  try{C=merge(C,await unpack(rawC));DEF=C.areas.map((a,i)=>({id:i,...a}))}catch(e){toast('קישור הטקסטים לא תקין')}
+}
+(async()=>{await loadCfg();if(S['g.0.d']===undefined&&S.goalsN===undefined&&C.goals.first)S['g.0.d']=C.goals.first;await loadFromHash();renderAll();setNav();spy()})();
 </script>
 </body>
 </html>
