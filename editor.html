@@ -10,7 +10,7 @@
 :root{--bg:#FAF8F4;--ink:#14161B;--mute:#6B6F76;--line:#ECE7DD;--sand:#F1EDE4;--amber:#F5A623}
 *{box-sizing:border-box}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Alef,Heebo,Arial,sans-serif;font-size:18px;line-height:1.6}
-.wrap{max-width:760px;margin:0 auto;padding:20px 16px 140px}
+.wrap{max-width:1120px;margin:0 auto;padding:20px 16px 140px}
 h1{font-size:30px;margin:18px 0 6px}
 .lead{color:var(--mute);margin:0 0 18px}
 section{background:#fff;border-radius:24px;padding:22px;margin-top:14px;box-shadow:0 6px 20px rgba(0,0,0,.05)}
@@ -22,13 +22,19 @@ input:focus,textarea:focus{outline-color:var(--ink)}
 textarea{min-height:90px;resize:vertical}
 input[type=number]{width:110px}
 .bar{position:fixed;left:0;right:0;bottom:0;background:rgba(250,248,244,.97);border-top:1px solid var(--line);padding:12px 16px;z-index:10}
-.bar .in{max-width:760px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
+.bar .in{max-width:1120px;margin:0 auto;display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:center}
 button{font:inherit;font-size:17px;font-weight:700;border:0;border-radius:999px;padding:11px 22px;cursor:pointer;background:var(--ink);color:#fff}
 button.alt{background:var(--sand);color:var(--ink);border:1px solid #D9D3C6}
 button.sm{font-size:15px;padding:7px 14px;font-weight:400}
-.msg{max-width:760px;margin:8px auto 0;font-size:16px;text-align:center;color:var(--mute);min-height:24px}
+.msg{max-width:1120px;margin:8px auto 0;font-size:16px;text-align:center;color:var(--mute);min-height:24px}
 .reset{margin-top:10px}
 a{color:var(--ink)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:22px;align-items:start}
+.pv{position:sticky;top:14px}
+.pvt{font-size:15px;color:var(--mute);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.pvt i{width:8px;height:8px;border-radius:50%;background:#2E9E57;display:inline-block}
+.pv iframe{width:100%;height:600px;border:1px solid #D9D3C6;border-radius:20px;background:#FAF8F4}
+@media(max-width:900px){.row{grid-template-columns:1fr}.pv{position:static}.pv iframe{height:480px}}
 </style>
 </head>
 <body>
@@ -61,14 +67,14 @@ const htmlToItem=h=>unbold(h).replace(/<small>/g,'\n').replace(/<\/small>/g,'').
 
 /* ---- הגדרת השדות ---- */
 const F=[
- {t:'המייל שלך',h:'אחרי שמילאת כתובת, מופיע ללקוחות בסוף החוברת כפתור "שליחה אליך". הוא פותח מייל מוכן אליך עם הקישור למילוי שלהם.',f:[
+ {t:'המייל שלך',a:'#save',h:'אחרי שמילאת כתובת, מופיע ללקוחות בסוף החוברת כפתור "שליחה אליך". הוא פותח מייל מוכן אליך עם הקישור למילוי שלהם.',f:[
   ['coach.email','כתובת המייל שלך','line'],['coach.label','כיתוב הכפתור','line'],['coach.cap','שורה מתחת לכפתור','line'],['coach.subject','נושא המייל','line'],['coach.body','פתיחת המייל','line']]},
- {t:'התפריט העליון',f:[['nav.0','פריט 1','line'],['nav.1','פריט 2','line'],['nav.2','פריט 3','line'],['nav.3','פריט 4','line'],['nav.4','פריט 5','line']]},
- {t:'ברוכים הבאים',h:'לפסקה חדשה משאירים שורה ריקה. הדגשה: **כך**.',f:[['welcome.h1','כותרת','line'],['welcome.lead','טקסט הפתיחה','paras'],['welcome.modeLabel','השאלה על אופן המילוי','line'],['welcome.coupleNote','הסבר למילוי כזוג','area']]},
- {t:'יעדים וחלומות',f:[['goals.title','כותרת','line'],['goals.add','כיתוב כפתור ההוספה','line'],['goals.sub','הסבר מתחת לכותרת','area'],['goals.count','כמה יעדים להציג מראש','num'],['goals.first','היעד הראשון, מוכן מראש (אפשר להשאיר ריק)','line']]},
- {t:'מטרות נוכחיות',f:[['current.titleSingle','כותרת, ביחיד','line'],['current.titleCouple','כותרת, בזוג','line'],['current.howSingle','שאלה, ביחיד','line'],['current.howCouple','שאלה, בזוג','line']]},
- {t:'מעגל החיים',h:'הדגשה: **כך**.',f:[['wheel.title','כותרת','line'],['wheel.sub','הסבר מתחת לכותרת','area'],['wheel.imp','הוראה: כמה חשוב','bold'],['wheel.cur','הוראה: מצב קיים','bold'],['areas','התחומים בטבלה, תחום בכל שורה. הראשון הוא קבוע ואי אפשר לשנות אותו בחוברת. אפשר עד 14 תחומים, והלקוחות מוסיפים בעצמם.','areas'],['wheel.gapNote','הערה מתחת לתוצאות','area'],['wheel.key.0','תיבה צהובה: נקודה 1','area'],['wheel.key.1','תיבה צהובה: נקודה 2','area'],['wheel.keyNote','תיבה צהובה: טקסט סיום','area']]},
- {t:'סיכום ומה להכין לפגישה הבאה',h:'שלוש השאלות מופיעות בניסוח ליחיד ובניסוח לזוג.',f:[['summary.title','כותרת','line'],['summary.single.0','שאלה 1, ביחיד','line'],['summary.single.1','שאלה 2, ביחיד','line'],['summary.single.2','שאלה 3, ביחיד','line'],['summary.couple.0','שאלה 1, בזוג','line'],['summary.couple.1','שאלה 2, בזוג','line'],['summary.couple.2','שאלה 3, בזוג','line'],['summary.prepTitle','כותרת "מה להכין"','line'],['summary.prepSub','הסבר','area'],['summary.prep.0','פריט 1 (שורות נוספות הופכות לשורות קטנות מתחתיו)','item'],['summary.prep.1','פריט 2','item'],['summary.prep.2','פריט 3','item'],['summary.prepNote','הערה בסוף','area']]}
+ {t:'התפריט העליון',a:'#top',f:[['nav.0','פריט 1','line'],['nav.1','פריט 2','line'],['nav.2','פריט 3','line'],['nav.3','פריט 4','line'],['nav.4','פריט 5','line']]},
+ {t:'ברוכים הבאים',a:'#welcome',h:'לפסקה חדשה משאירים שורה ריקה. הדגשה: **כך**.',f:[['welcome.h1','כותרת','line'],['welcome.lead','טקסט הפתיחה','paras'],['welcome.modeLabel','השאלה על אופן המילוי','line'],['welcome.coupleNote','הסבר למילוי כזוג','area']]},
+ {t:'יעדים וחלומות',a:'#goals',f:[['goals.title','כותרת','line'],['goals.add','כיתוב כפתור ההוספה','line'],['goals.sub','הסבר מתחת לכותרת','area'],['goals.count','כמה יעדים להציג מראש','num'],['goals.first','היעד הראשון, מוכן מראש (אפשר להשאיר ריק)','line']]},
+ {t:'מטרות נוכחיות',a:'#current',f:[['current.titleSingle','כותרת, ביחיד','line'],['current.titleCouple','כותרת, בזוג','line'],['current.howSingle','שאלה, ביחיד','line'],['current.howCouple','שאלה, בזוג','line']]},
+ {t:'מעגל החיים',a:'#wheel',h:'הדגשה: **כך**.',f:[['wheel.title','כותרת','line'],['wheel.sub','הסבר מתחת לכותרת','area'],['wheel.imp','הוראה: כמה חשוב','bold'],['wheel.cur','הוראה: מצב קיים','bold'],['areas','התחומים בטבלה, תחום בכל שורה. הראשון הוא קבוע ואי אפשר לשנות אותו בחוברת. אפשר עד 14 תחומים, והלקוחות מוסיפים בעצמם.','areas'],['wheel.gapNote','הערה מתחת לתוצאות','area'],['wheel.key.0','תיבה צהובה: נקודה 1','area'],['wheel.key.1','תיבה צהובה: נקודה 2','area'],['wheel.keyNote','תיבה צהובה: טקסט סיום','area']]},
+ {t:'סיכום ומה להכין לפגישה הבאה',a:'#summary',h:'שלוש השאלות מופיעות בניסוח ליחיד ובניסוח לזוג.',f:[['summary.title','כותרת','line'],['summary.single.0','שאלה 1, ביחיד','line'],['summary.single.1','שאלה 2, ביחיד','line'],['summary.single.2','שאלה 3, ביחיד','line'],['summary.couple.0','שאלה 1, בזוג','line'],['summary.couple.1','שאלה 2, בזוג','line'],['summary.couple.2','שאלה 3, בזוג','line'],['summary.prepTitle','כותרת "מה להכין"','line'],['summary.prepSub','הסבר','area'],['summary.prep.0','פריט 1 (שורות נוספות הופכות לשורות קטנות מתחתיו)','item'],['summary.prep.1','פריט 2','item'],['summary.prep.2','פריט 3','item'],['summary.prepNote','הערה בסוף','area']]}
 ];
 
 const get=(o,p)=>p.split('.').reduce((x,k)=>x==null?x:x[k],o);
@@ -119,15 +125,26 @@ function build(){ // מחזיר רק מה ששונה מהמקור
 
 /* ---- ציור הטופס ---- */
 function render(){
-  $('#form').innerHTML=F.map(s=>`<section><h2>${s.t}</h2>${s.h?`<p class="hint">${s.h}</p>`:''}`+s.f.map(([p,l,ty])=>{
+  $('#form').innerHTML=F.map((s,si)=>`<section data-si="${si}"><div class="row"><div class="fields"><h2>${s.t}</h2>${s.h?`<p class="hint">${s.h}</p>`:''}`+s.f.map(([p,l,ty])=>{
     const v=esc(V[p]||'');
     const id='f_'+p.replace(/\./g,'_');
     if(ty==='line'||ty==='num')return `<label for="${id}">${l}</label><input id="${id}" data-p="${p}" ${ty==='num'?'type="number" min="1" max="20"':'type="text"'} value="${v}">`;
     const rows=ty==='paras'?8:ty==='areas'?9:ty==='item'?3:3;
     return `<label for="${id}">${l}</label><textarea id="${id}" data-p="${p}" rows="${rows}">${v}</textarea>`;
-  }).join('')+'</section>').join('');
+  }).join('')+`</div><div class="pv"><div class="pvt"><i></i>איך זה ייראה בחוברת</div><iframe title="תצוגה מקדימה" data-si="${si}" loading="lazy"></iframe></div></div></section>`).join('');
+  refreshAll();
 }
-document.addEventListener('input',e=>{const p=e.target.dataset&&e.target.dataset.p;if(!p)return;V[p]=e.target.value;try{localStorage.setItem(KEY,JSON.stringify(V))}catch(x){}});
+/* ---- תצוגה מקדימה חיה ליד כל אזור ---- */
+const timers={};
+async function refresh(si){
+  const fr=document.querySelector('iframe[data-si="'+si+'"]');if(!fr)return;
+  const url=await makeLink();
+  const next=url+(url.includes('?')?'&':'?')+'p='+si+F[si].a;
+  fr.src=next;
+}
+const refreshAll=()=>F.forEach((_,i)=>refresh(i));
+function schedule(si){clearTimeout(timers[si]);timers[si]=setTimeout(()=>refresh(si),700)}
+document.addEventListener('input',e=>{const p=e.target.dataset&&e.target.dataset.p;if(!p)return;V[p]=e.target.value;try{localStorage.setItem(KEY,JSON.stringify(V))}catch(x){}const sec=e.target.closest('section');if(sec)schedule(+sec.dataset.si)});
 
 /* ---- קישור ---- */
 const b64=u8=>{let s='';u8.forEach(b=>s+=String.fromCharCode(b));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
