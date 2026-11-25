@@ -1,5 +1,5 @@
 name: keepalive
-# מעיר את מסד הנתונים כל כמה ימים, כדי ש-Supabase החינמי לא יושהה בגלל חוסר פעילות
+# Wakes the database every few days so the free Supabase plan does not pause it
 on:
   schedule:
     - cron: "17 6 */3 * *"
@@ -8,4 +8,6 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - run: curl -fsS "https://fdaixsvbzxwaqyjbaopy.supabase.co/rest/v1/published_booklets?select=slug&limit=1" -H "apikey: ${{ vars.SB_KEY }}"
+      - name: ping
+        run: |
+          curl -fsS "https://fdaixsvbzxwaqyjbaopy.supabase.co/rest/v1/published_booklets?select=slug&limit=1" -H "apikey: ${{ vars.SB_KEY }}"
