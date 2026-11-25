@@ -6,6 +6,12 @@
 <title>חוברת עבודה - מיינדסט של עשירים</title>
 <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" crossorigin="anonymous">
+<script src="versions/default.js"></script>
+<script>
+(function(){var v=(new URLSearchParams(location.search).get('v')||'').toLowerCase();
+window.VER=/^[a-z0-9_-]{1,40}$/.test(v)&&v!=='default'?v:'default';
+if(window.VER!=='default')document.write('<script src="versions/'+window.VER+'.js"><\/script>');})();
+</script>
 <style>
 :root{--bg:#FAF8F4;--hair:#E4DFD3;--sand:#EFE9DC;--sand-2:#F4F0E7;--ink:#14161B;--sky:#4D7CFF;--pink:#E2718A;--line:#E4DFD3;--mute:#5E5A52;
 --violet-s:#DDD3FF;--sky-s:#BBD6FF;--pink-s:#FBD9E1;--sun-s:#FFE9B0;--amber:#F5A623;--amber-s:#FFF4DC;--blue-s:#E3ECFF}
@@ -180,31 +186,25 @@ label.big:first-of-type{margin-top:0}
 </head>
 <body id="top">
 <nav><div class="in" id="nav">
-<a href="#welcome"><b>1</b>ברוכים הבאים</a><a href="#goals"><b>2</b>יעדים וחלומות</a><a href="#current"><b>3</b>מטרות נוכחיות</a><a href="#wheel"><b>4</b>מעגל החיים</a><a href="#summary"><b>5</b>סיכום ומה להכין לפגישה הבאה</a>
+<a href="#welcome"><b>1</b><span data-c="nav.0"></span></a><a href="#goals"><b>2</b><span data-c="nav.1"></span></a><a href="#current"><b>3</b><span data-c="nav.2"></span></a><a href="#wheel"><b>4</b><span data-c="nav.3"></span></a><a href="#summary"><b>5</b><span data-c="nav.4"></span></a>
 </div><div id="bar"><i></i></div></nav>
 
 <div class="wrap">
 
 <section id="welcome">
-<h1>ברוכים הבאים</h1>
+<h1 data-c="welcome.h1"></h1>
 <div class="save noprint">נשמר אוטומטית במכשיר הזה</div>
-<div class="lead" style="margin-top:20px">
-<p>לפני שנדבר על כסף, חשוב שנדבר על מה שהיינו רוצות להשיג באמצעותו.</p>
-<p>כסף הוא אמצעי, לא המטרה. הוא מאפשר לנו ליצור את החיים שאנחנו רוצות לעצמנו: להגשים חלומות, לממש רצונות, לבחור בחופשיות ולהרגיש ביטחון ועצמאות.</p>
-<p>כדי שנוכל ללמוד לנהל את הכסף שלנו בצורה שתשרת אותנו, אנחנו צריכות קודם כול לעצור ולשאול את עצמנו: לאן אנחנו רוצות להגיע? איך נראים החיים שאנחנו חולמות עליהם?</p>
-<p>קחו רגע לחלום בגדול, לדמיין, להרגיש ולכתוב. בשלב הזה אנחנו מתמקדות ב״מה״ ולא ב״איך״. את הדרך לשם נבנה יחד בהמשך.</p>
-<p>כי כשברור לנו לאן אנחנו רוצות להגיע, קל יותר להבין איך הכסף יכול לעזור לנו להגיע לשם.</p>
-</div>
-<div class="modebox noprint"><div class="lb">איך ממלאים את השאלון?</div>
+<div class="lead" style="margin-top:20px" data-c="welcome.lead"></div>
+<div class="modebox noprint"><div class="lb" data-c="welcome.modeLabel"></div>
 <div class="seg" id="mode"><button data-mode="0"><i class="ri-user-fill"></i>יחיד</button><button data-mode="1"><i class="ri-group-fill"></i>אנחנו ממלאים כזוג</button></div></div>
 <div class="couple">
 <div class="names"><div><label>שם ראשון</label><input type="text" data-k="n.a" placeholder="למשל: מאיה"></div><div><label>שם שני</label><input type="text" data-k="n.b" placeholder="למשל: דן"></div></div>
-<p class="mute" style="margin-top:8px">בכל אחת משתי המטרות בוחרים של מי היא. במעגל החיים לכל אחד טבלה משלו, ובסוף רואים את שני הגלגלים זה ליד זה. הסיכום משותף.</p>
+<p class="mute" style="margin-top:8px" data-c="welcome.coupleNote"></p>
 </div>
 </section>
 
 <section id="goals">
-<div class="sh"><div class="shrow"><h2>יעדים וחלומות</h2><button class="addbtn noprint" id="addGoal"><i class="ri-heart-add-fill"></i>הוספת יעד/חלום</button></div>
+<div class="sh"><div class="shrow"><h2 data-c="goals.title"></h2><button class="addbtn noprint" id="addGoal"><i class="ri-heart-add-fill"></i><span data-c="goals.add"></span></button></div>
 <p class="sub" id="goalsSub"></p></div>
 <div id="goalList"></div>
 </section>
@@ -215,11 +215,11 @@ label.big:first-of-type{margin-top:0}
 </section>
 
 <section id="wheel">
-<h2>מעגל החיים</h2>
-<p class="sub">מעגל החיים יעזור לנו לבטא, מאוחר יותר, את התיעדוף שלנו בתקציב היומיומי ובתכנון קדימה.</p>
+<h2 data-c="wheel.title"></h2>
+<p class="sub" data-c="wheel.sub"></p>
 <ul class="steps">
-<li class="imp"><i class="ri-star-fill"></i><span><b>כמה חשוב:</b> מספר מ-1 עד 10. <b>10</b> = חשוב לי מאוד, ואני רואה ערך גדול בהשקעה בתחום. <b>1</b> = לא חשוב לי, ואין צורך להשקיע בו.</span></li>
-<li class="cur"><i class="ri-emotion-happy-fill"></i><span><b>מצב קיים:</b> מספר מ-1 עד 10 על מידת שביעות הרצון שלכם מהתפקוד שלכם בתחום, בלי קשר לתחומים אחרים.</span></li>
+<li class="imp"><i class="ri-star-fill"></i><span data-c="wheel.imp"></span></span></li>
+<li class="cur"><i class="ri-emotion-happy-fill"></i><span data-c="wheel.cur"></span></span></li>
 </ul>
 <div id="tables"></div>
 <button class="bigbtn noprint" id="gen"><i class="ri-donut-chart-fill"></i><span id="genTxt">יצירת גלגל החיים</span></button>
@@ -228,34 +228,29 @@ label.big:first-of-type{margin-top:0}
 <div class="wheels" id="wheels"></div>
 <div class="legend"><span><i style="background:var(--amber)"></i>כמה חשוב</span><span><i style="background:var(--sky)"></i>מצב קיים</span><span><i class="f" style="background:#DDD3FF"></i>הטווח ביניהם</span><span><i class="f" style="background:#F6BFCC;box-shadow:inset 0 0 0 1px var(--pink)"></i>פער גדול</span></div>
 <div class="results" id="results"></div>
-<p class="mute" id="gapNote" style="display:none;text-align:center;margin-top:18px">נראה כי אלו התחומים שגורמים לאי נוחות רבה. הנטייה הטבעית שלנו היא לצמצם פערים במקומות אלו, משום שאלו המקומות בהם אנחנו חווים שביעות רצון נמוכה באופן יומיומי ולכן שם נבחר להשקיע.</p>
+<p class="mute" id="gapNote" style="display:none;text-align:center;margin-top:18px" data-c="wheel.gapNote"></p>
 <div class="key">
 <ul>
-<li><i class="ri-checkbox-circle-fill"></i><span>תחומים שציינתם כחשובים יקבלו מענה בעת הכנת התקציב.</span></li>
-<li><i class="ri-checkbox-circle-fill"></i><span>פער מספרי גדול בין הנושא שחשוב לכם לרמת התפקוד שלכם בו מבטא את התחומים שהכי מפריעים לכם בחיים.</span></li>
+<li><i class="ri-checkbox-circle-fill"></i><span data-c="wheel.key.0"></span></li>
+<li><i class="ri-checkbox-circle-fill"></i><span data-c="wheel.key.1"></span></li>
 </ul>
-<p>מודל מעגל החיים מדגים את זכות הבחירה שיש לכם: לטפל ולהקצות זמן לנושאים הכי בוערים אצלכם בחיים, כך שהם יקבלו ביטוי גם בתקציב שלכם וגם במטרות שלכם.</p>
+<p data-c="wheel.keyNote"></p>
 </div>
 </div>
 </section>
 
 <section id="summary">
-<h2>סיכום ומה להכין לפגישה הבאה</h2>
+<h2 data-c="summary.title"></h2>
 <div style="margin-top:14px">
-<label class="big" id="sl1">ההישגים שלי השבוע</label><textarea data-k="s.win"></textarea>
-<label class="big" id="sl2">איך אחגוג אותם?</label><textarea data-k="s.cel"></textarea>
-<label class="big" id="sl3">הקשיים שלי</label><textarea data-k="s.hard"></textarea>
+<label class="big" id="sl1"></label><textarea data-k="s.win"></textarea>
+<label class="big" id="sl2"></label><textarea data-k="s.cel"></textarea>
+<label class="big" id="sl3"></label><textarea data-k="s.hard"></textarea>
 </div>
 
-<h2 class="s2">מה להכין לפגישה הבאה</h2>
-<p class="sub">לצורך הכנת השיקוף והתקציב תצטרכו את החומרים הבאים:</p>
-<ul class="prep">
-<li><input type="checkbox" data-k="p.1"><span>תדפיס תנועות בנק. חודשיים אחרונים מלאים.</span></li>
-<li><input type="checkbox" data-k="p.2"><span>תדפיס כרטיסי אשראי. חודשיים אחרונים מלאים.</span></li>
-<li><input type="checkbox" data-k="p.3"><span>פירוט הכנסות:
-<small>שכירים: תלוש שכר אחרון.</small><small>עצמאים: דו"ח רווח והפסד שנה קודמת.</small><small>הכנסות נוספות, קצבאות, עזרה מקרובי משפחה, שכירות וכדומה.</small></span></li>
-</ul>
-<p class="mute">את החומרים שהוצאתם יש לשמור אצלכם, לצורך ביצוע המשימה. אין צורך לשלוח מסמכים אלי. אני אקבל מכם את קובץ האקסל לאחר שתמלאו את הנתונים.</p>
+<h2 class="s2" data-c="summary.prepTitle"></h2>
+<p class="sub" data-c="summary.prepSub"></p>
+<ul class="prep" id="prep"></ul>
+<p class="mute" data-c="summary.prepNote"></p>
 
 </section>
 
@@ -271,9 +266,18 @@ label.big:first-of-type{margin-top:0}
 <div id="stat"><i class="ri-checkbox-circle-fill"></i>נשמר</div>
 
 <script>
-const KEY='booklet-mock-v4';
+const merge=(a,b)=>{if(Array.isArray(b)||typeof b!=='object'||b===null)return b===undefined?a:b;const o={...(a&&typeof a==='object'&&!Array.isArray(a)?a:{})};for(const k in b)o[k]=merge(o[k],b[k]);return o};
+if(!(window.VERSIONS&&VERSIONS[VER]))window.VER='default';
+const C=merge(VERSIONS.default,VER==='default'?{}:VERSIONS[VER]);
+const cget=(o,p)=>p.split('.').reduce((x,k)=>x==null?x:x[k],o);
+function applyContent(){
+  document.title=C.title;
+  $$('[data-c]').forEach(e=>{const v=cget(C,e.dataset.c);if(v!=null)e.innerHTML=v});
+  $('#prep').innerHTML=C.summary.prep.map((t,i)=>`<li><input type="checkbox" data-k="p.${i+1}"><span>${t}</span></li>`).join('');
+}
+const KEY=VER==='default'?'booklet-mock-v4':'booklet-'+VER+'-v1';
 let S={};try{S=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
-if(S['g.0.d']===undefined&&S.goalsN===undefined)S['g.0.d']='חופש כלכלי';
+if(S['g.0.d']===undefined&&S.goalsN===undefined&&C.goals.first)S['g.0.d']=C.goals.first;
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 let statT,statH;
 const flash=()=>{clearTimeout(statT);statT=setTimeout(()=>{const e=$('#stat');e.classList.add('show');clearTimeout(statH);statH=setTimeout(()=>e.classList.remove('show'),2000)},450)};
@@ -283,7 +287,7 @@ const MONTHS=['ינואר','פברואר','מרץ','אפריל','מאי','יונ
 const Y0=new Date().getFullYear();
 const dateSel=k=>`<div class="dt"><select data-k="${k}.m"><option value="">חודש</option>${MONTHS.map((m,i)=>`<option value="${i+1}">${m}</option>`).join('')}</select><select data-k="${k}.y"><option value="">שנה</option>${[...Array(16)].map((_,i)=>`<option>${Y0+i}</option>`).join('')}</select></div>`;
 const money=k=>`<div class="money"><span class="cur">₪</span><input type="text" class="amt" inputmode="numeric" data-k="${k}"></div>`;
-const DEF=[{id:0,name:'ניהול ההון האישי',icon:'ri-coin-fill',fixed:true},{id:1,name:'קריירה',icon:'ri-briefcase-4-fill'},{id:2,name:'ספורט',icon:'ri-basketball-fill'},{id:3,name:'הורות',icon:'ri-parent-fill'},{id:4,name:'זוגיות',icon:'ri-hearts-fill'},{id:5,name:'תזונה',icon:'ri-restaurant-fill'},{id:6,name:'משפחה',icon:'ri-group-fill'}];
+const DEF=C.areas.map((a,i)=>({id:i,...a}));
 const MAXA=14; // מספר הפלחים באיור המקורי
 // לכל אחד רשימת תחומים משלו (בזוג: שתי טבלאות נפרדות)
 const areas=p=>{const k='areas.'+p;if(!S[k]){S[k]=JSON.parse(JSON.stringify(DEF));for(let i=DEF.length;i<MAXA;i++)S[k].push({id:i,name:'',icon:'ri-sparkling-fill'})}return S[k]};
@@ -299,8 +303,8 @@ const yesno=k=>`<div class="seg sm" data-yn="${k}">${['כן','לא'].map(v=>`<bu
 
 /* ---- יעדים ---- */
 function renderGoals(){
-  const n=S.goalsN||4,c=!!S.couple;
-  $('#goalsSub').textContent='כתבו את מה שאתם רוצים להגשים בעשור הקרוב. חשיבות: 10 = הכי חשוב, 1 = הכי פחות.';
+  const n=S.goalsN||C.goals.count,c=!!S.couple;
+  $('#goalsSub').textContent=C.goals.sub;
   $('#goalList').innerHTML=[...Array(n)].map((_,i)=>`<div class="goal">
 <div class="ttl"><div class="n">${i+1}</div><span>${c?'יעד/חלום':'יעד/חלום'}</span>${owner('g.'+i+'.o')}${n>1?`<button class="trash noprint" data-del="${i}" title="מחיקה" aria-label="מחיקה"><i class="ri-delete-bin-line"></i></button>`:''}</div>
 <div class="g1">
@@ -314,12 +318,12 @@ function renderGoals(){
 }
 function renderTop(){
   const c=!!S.couple;
-  $('#curTitle').textContent=c?'שתי המטרות הכי חשובות לנו כרגע':'שתי המטרות הכי חשובות לי כרגע';
+  $('#curTitle').textContent=c?C.current.titleCouple:C.current.titleSingle;
   $('#topGoals').innerHTML=[1,2].map(n=>`<div class="tgc"><div class="ttl"><div class="n">${n}</div><span>מטרה מס' ${n}</span>${owner('t'+n+'.o')}</div>
 <div class="tg"><div class="a"><label>שם המטרה</label><input type="text" data-k="t${n}.name"></div>
 <div><label>מתי?</label>${dateSel('t'+n+'.w')}</div>
 <div class="m"><label>כמה כסף?</label>${money('t'+n+'.money')}</div></div>
-<label style="margin-top:18px">${c?'מה עושים (או כבר עושים) כדי להוציא אותה לפועל?':'מה אני הולכ/ת לעשות / כבר עושה כדי להוציא אותה לפועל?'}</label><textarea data-k="t${n}.how"></textarea></div>`).join('');
+<label style="margin-top:18px">${c?C.current.howCouple:C.current.howSingle}</label><textarea data-k="t${n}.how"></textarea></div>`).join('');
 }
 
 /* ---- טבלאות תחומים: אחת לכל אחד ---- */
@@ -402,11 +406,11 @@ function fillValues(){
 }
 function renderSummaryLabels(){
   const c=!!S.couple;
-  $('#sl1').textContent=c?'ההישגים שלנו השבוע':'ההישגים שלי השבוע';
-  $('#sl2').textContent=c?'איך נחגוג אותם?':'איך אחגוג אותם?';
-  $('#sl3').textContent=c?'הקשיים שלנו':'הקשיים שלי';
+  const L=c?C.summary.couple:C.summary.single;
+  [1,2,3].forEach(i=>$('#sl'+i).textContent=L[i-1]);
 }
 function renderAll(){
+  applyContent();
   document.body.classList.toggle('is-couple',!!S.couple);
   $$('#mode button').forEach(b=>b.classList.toggle('on',(b.dataset.mode==='1')===!!S.couple));
   renderGoals();renderTop();renderTables();renderSummaryLabels();fillValues();
@@ -433,7 +437,7 @@ document.addEventListener('click',e=>{
   const yb=e.target.closest('[data-yv]');
   if(yb){const g=yb.parentElement,k=g.dataset.yn;S[k]=S[k]===yb.dataset.yv?'':yb.dataset.yv;save();g.querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.yv===S[k]));return}
   const db=e.target.closest('[data-del]');
-  if(db){const i=+db.dataset.del,n=S.goalsN||4;
+  if(db){const i=+db.dataset.del,n=S.goalsN||C.goals.count;
     if(!confirm('למחוק את היעד/החלום מספר '+(i+1)+'?'))return;
     const sub=['d','i','w.m','w.y','c','s','n','sn','o'];
     for(let j=i;j<n;j++)sub.forEach(f=>{const nx='g.'+(j+1)+'.'+f,cu='g.'+j+'.'+f;if(S[nx]!==undefined&&j+1<n)S[cu]=S[nx];else delete S[cu]});
@@ -441,7 +445,7 @@ document.addEventListener('click',e=>{
   const nb=e.target.closest('[data-note]');
   if(nb){const box=nb.nextElementSibling;box.classList.toggle('show');S['g.'+nb.dataset.note+'.sn']=box.classList.contains('show');save();if(box.classList.contains('show'))box.querySelector('textarea').focus()}
 });
-$('#addGoal').onclick=()=>{S.goalsN=(S.goalsN||4)+1;save();renderGoals();fillValues();$$('#goalList .goal').pop().querySelector('input[type=text]').focus()};
+$('#addGoal').onclick=()=>{S.goalsN=(S.goalsN||C.goals.count)+1;save();renderGoals();fillValues();$$('#goalList .goal').pop().querySelector('input[type=text]').focus()};
 $('#gen').onclick=()=>{genWheel(true);$('#wheelOut').scrollIntoView({behavior:'smooth',block:'start'})};
 let liveT;const live=()=>{if(!S.gen)return;clearTimeout(liveT);liveT=setTimeout(()=>{paintResults();paintWheels(1)},120)};
 ['input','change','click'].forEach(ev=>document.addEventListener(ev,e=>{if(e.target.closest&&e.target.closest('#table,[data-an]'))live()}));
