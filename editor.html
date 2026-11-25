@@ -28,6 +28,17 @@ button.alt{background:var(--sand);color:var(--ink);border:1px solid #D9D3C6}
 button.sm{font-size:15px;padding:7px 14px;font-weight:400}
 .msg{max-width:1120px;margin:8px auto 0;font-size:16px;text-align:center;color:var(--mute);min-height:24px}
 .reset{margin-top:10px}
+.steps{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none;margin-top:6px}
+.steps::-webkit-scrollbar{display:none}
+.steps button{flex:none;display:flex;align-items:center;gap:8px;background:#fff;color:var(--mute);border:1px solid var(--line);border-radius:99px;padding:7px 14px 7px 12px;font-size:15px;font-weight:400}
+.steps button b{width:22px;height:22px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-size:12px;color:var(--mute)}
+.steps button.on{background:var(--ink);color:#fff;font-weight:700}
+.steps button.on b{background:#fff;color:var(--ink)}
+.steps button.done b{background:#2E9E57;color:#fff}
+.prog{font-size:15px;color:var(--mute);margin:2px 2px 0}
+section.hid{display:none}
+#fin h2{margin-bottom:10px}
+#fin .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 a{color:var(--ink)}
 .row{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:22px;align-items:start}
 .pv{position:sticky;top:14px}
@@ -41,13 +52,15 @@ a{color:var(--ink)}
 <div class="wrap">
 <h1>עריכת הטקסטים של החוברת</h1>
 <p class="lead">כאן משנים את כל הטקסטים, בלי לגעת בקוד. המבנה נשאר זהה: יעדים וחלומות, מטרות נוכחיות ומעגל החיים. בסוף מקבלים קישור אחד לשליחה ללקוחות. הטיוטה נשמרת אוטומטית במחשב הזה.</p>
+<div class="steps" id="steps"></div>
 <div id="form"></div>
-<button class="alt sm reset" id="reset">איפוס כל הטקסטים למקור</button>
+<section id="fin" class="hid"><h2>סיימנו. הקישור ללקוחות</h2>
+<p class="hint">הקישור מכיל את כל הטקסטים ששינית. שלחי אותו ללקוחות, למשל ב-WhatsApp או במייל. אפשר לחזור לכל שלב ולתקן, והקישור יתעדכן.</p>
+<div class="btns"><button id="copy">העתקת קישור ללקוחות</button><button class="alt" id="open">פתיחה בדף מלא</button><button class="alt" id="dl">הורדת קובץ גרסה</button></div>
+<button class="alt sm reset" id="reset">איפוס כל הטקסטים למקור</button></section>
 </div>
 <div class="bar"><div class="in">
-<button id="copy">העתקת קישור ללקוחות</button>
-<button class="alt" id="open">תצוגה מקדימה</button>
-<button class="alt" id="dl">הורדת קובץ גרסה</button>
+<button class="alt" id="prev">הקודם</button><span class="prog" id="prog"></span><button id="next">הבא</button>
 </div><div class="msg" id="msg"></div></div>
 
 <script>
@@ -124,6 +137,22 @@ function build(){ // מחזיר רק מה ששונה מהמקור
 }
 
 /* ---- ציור הטופס ---- */
+let STEP=0;const N=()=>F.length+1;
+function showStep(i){
+  STEP=Math.max(0,Math.min(N()-1,i));
+  document.querySelectorAll('#form section').forEach((el,k)=>el.classList.toggle('hid',k!==STEP));
+  $('#fin').classList.toggle('hid',STEP!==F.length);
+  $('#steps').innerHTML=[...F.map(x=>x.t),'סיום'].map((t,k)=>`<button data-st="${k}" class="${k===STEP?'on':k<STEP?'done':''}"><b>${k<STEP?'✓':k+1}</b>${t}</button>`).join('');
+  $('#prog').textContent='שלב '+(STEP+1)+' מתוך '+N();
+  $('#prev').style.visibility=STEP===0?'hidden':'visible';
+  $('#next').style.visibility=STEP===N()-1?'hidden':'visible';
+  $('#next').textContent=STEP===N()-2?'לסיום':'הבא';
+  say('');
+  if(STEP<F.length)refresh(STEP);
+  window.scrollTo({top:0,behavior:'smooth'});
+  try{sessionStorage.setItem('booklet-editor-step',STEP)}catch(e){}
+}
+document.addEventListener('click',e=>{const b=e.target.closest('[data-st]');if(b)showStep(+b.dataset.st)});
 function render(){
   $('#form').innerHTML=F.map((s,si)=>`<section data-si="${si}"><div class="row"><div class="fields"><h2>${s.t}</h2>${s.h?`<p class="hint">${s.h}</p>`:''}`+s.f.map(([p,l,ty])=>{
     const v=esc(V[p]||'');
@@ -132,7 +161,8 @@ function render(){
     const rows=ty==='paras'?8:ty==='areas'?9:ty==='item'?3:3;
     return `<label for="${id}">${l}</label><textarea id="${id}" data-p="${p}" rows="${rows}">${v}</textarea>`;
   }).join('')+`</div><div class="pv"><div class="pvt"><i></i>איך זה ייראה בחוברת</div><iframe title="תצוגה מקדימה" data-si="${si}" loading="lazy"></iframe></div></div></section>`).join('');
-  refreshAll();
+  let st=0;try{st=+sessionStorage.getItem('booklet-editor-step')||0}catch(e){}
+  showStep(st);
 }
 /* ---- תצוגה מקדימה חיה ליד כל אזור ---- */
 const timers={};
@@ -180,7 +210,9 @@ $('#dl').onclick=()=>{
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/javascript'}));a.download=name+'.js';a.click();
   say('הורד הקובץ '+name+'.js. אפשר להוסיף אותו לתיקיית versions באתר.');
 };
-$('#reset').onclick=()=>{if(!confirm('לאפס את כל הטקסטים לטקסטים המקוריים?'))return;try{localStorage.removeItem(KEY)}catch(e){}loadFrom({});render();say('הטקסטים אופסו.')};
+$('#prev').onclick=()=>showStep(STEP-1);
+$('#next').onclick=()=>showStep(STEP+1);
+$('#reset').onclick=()=>{if(!confirm('לאפס את כל הטקסטים לטקסטים המקוריים?'))return;try{localStorage.removeItem(KEY)}catch(e){}loadFrom({});render();showStep(F.length);say('הטקסטים אופסו.')};
 
 (async()=>{
   let cfg={};
