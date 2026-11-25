@@ -36,7 +36,6 @@ button.sm{font-size:15px;padding:7px 14px;font-weight:400}
 .steps button:hover{border-color:var(--ink)}
 .steps button.on{background:var(--ink);color:#fff;font-weight:700;border-color:var(--ink)}
 .steps button.on b{background:#fff;color:var(--ink)}
-.steps button.done b{background:#2E9E57;color:#fff}
 .prog{font-size:15px;color:var(--mute);margin:2px 2px 0}
 .pbar{height:4px;background:var(--line)}.pbar i{display:block;height:100%;background:var(--ink);width:0;transition:width .25s}
 @media(max-width:1000px){
@@ -156,7 +155,7 @@ function showStep(i){
   STEP=Math.max(0,Math.min(N()-1,i));
   document.querySelectorAll('#form section').forEach((el,k)=>el.classList.toggle('hid',k!==STEP));
   $('#fin').classList.toggle('hid',STEP!==F.length);
-  $('#steps').innerHTML=[...F.map(x=>x.t),'סיום'].map((t,k)=>`<button data-st="${k}" class="${k===STEP?'on':k<STEP?'done':''}"><b>${k<STEP?'✓':k+1}</b>${t}</button>`).join('');
+  $('#steps').innerHTML=[...F.map(x=>x.t),'סיום'].map((t,k)=>`<button data-st="${k}" class="${k===STEP?'on':k<STEP?'done':''}"><b>${k+1}</b>${t}</button>`).join('');
   $('#prog').textContent='שלב '+(STEP+1)+' מתוך '+N();
   $('#pf').style.width=((STEP+1)/N()*100)+'%';
   const on=document.querySelector('#steps .on');if(on&&on.scrollIntoView)on.scrollIntoView({block:'nearest',inline:'center'});
