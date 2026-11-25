@@ -195,10 +195,10 @@ label.big:first-of-type{margin-top:0}
 
 <section id="welcome">
 <h1 data-c="welcome.h1"></h1>
-<div class="save noprint">נשמר אוטומטית במכשיר הזה</div>
+<div class="save noprint" data-c="ui.autosave"></div>
 <div class="lead" style="margin-top:20px" data-c="welcome.lead"></div>
 <div class="modebox noprint"><div class="lb" data-c="welcome.modeLabel"></div>
-<div class="seg" id="mode"><button data-mode="0"><i class="ri-user-fill"></i>יחיד</button><button data-mode="1"><i class="ri-group-fill"></i>אנחנו ממלאים כזוג</button></div></div>
+<div class="seg" id="mode"><button data-mode="0"><i class="ri-user-fill"></i><span data-c="ui.modeSingle"></span></button><button data-mode="1"><i class="ri-group-fill"></i><span data-c="ui.modeCouple"></span></button></div></div>
 <div class="couple">
 <div class="names"><div><label>שם ראשון</label><input type="text" data-k="n.a" placeholder="למשל: מאיה"></div><div><label>שם שני</label><input type="text" data-k="n.b" placeholder="למשל: דן"></div></div>
 <p class="mute" style="margin-top:8px" data-c="welcome.coupleNote"></p>
@@ -224,7 +224,7 @@ label.big:first-of-type{margin-top:0}
 <li class="cur"><i class="ri-emotion-happy-fill"></i><span data-c="wheel.cur"></span></span></li>
 </ul>
 <div id="tables"></div>
-<button class="bigbtn noprint" id="gen"><i class="ri-donut-chart-fill"></i><span id="genTxt">יצירת גלגל החיים</span></button>
+<button class="bigbtn noprint" id="gen"><i class="ri-donut-chart-fill"></i><span id="genTxt" data-c="ui.gen"></span></button>
 
 <div id="wheelOut">
 <div class="wheels" id="wheels"></div>
@@ -258,9 +258,9 @@ label.big:first-of-type{margin-top:0}
 
 <section id="save" class="noprint">
 <div class="btns">
-<div class="sv"><button class="btn" id="link"><i class="ri-global-fill"></i>שמירת הקובץ כקישור</button><div class="cap">מאפשר לחזור ולהמשיך</div></div>
+<div class="sv"><button class="btn" id="link"><i class="ri-global-fill"></i><span data-c="ui.saveLink"></span></button><div class="cap" data-c="ui.saveLinkCap"></div></div>
 <div class="sv" id="sendBox" style="display:none"><button class="btn" id="sendCoach"><i class="ri-send-plane-fill"></i><span id="sendLbl"></span></button><div class="cap" id="sendCap"></div></div>
-<div class="sv"><button class="btn alt" id="pdf"><i class="ri-file-pdf-2-fill"></i>שמירה כ-PDF</button><div class="cap">עותק לקריאה והדפסה</div></div>
+<div class="sv"><button class="btn alt" id="pdf"><i class="ri-file-pdf-2-fill"></i><span data-c="ui.savePdf"></span></button><div class="cap" data-c="ui.savePdfCap"></div></div>
 </div>
 <div class="msg noprint" id="linkMsg"></div>
 </section>
@@ -273,6 +273,8 @@ const merge=(a,b)=>{if(Array.isArray(b)||typeof b!=='object'||b===null)return b=
 if(!(window.VERSIONS&&VERSIONS[VER]))window.VER='default';
 let C=merge(VERSIONS.default,VER==='default'?{}:VERSIONS[VER]);
 const rawC=new URLSearchParams(location.search).get('c')||'';
+const rawB=(new URLSearchParams(location.search).get('b')||'').toLowerCase().replace(/[^a-z0-9-]/g,'');
+const SB_URL='https://fdaixsvbzxwaqyjbaopy.supabase.co',SB_KEY='sb_publishable_r6dQ9CVqgXU0LJj_B0CWAw_6goNHgki';
 const hash=t=>{let h=5381;for(const ch of t)h=((h<<5)+h+ch.charCodeAt(0))|0;return (h>>>0).toString(36)};
 const cget=(o,p)=>p.split('.').reduce((x,k)=>x==null?x:x[k],o);
 function applyCoach(){
@@ -285,9 +287,9 @@ function applyContent(){
   applyCoach();
   document.title=C.title;
   $$('[data-c]').forEach(e=>{const v=cget(C,e.dataset.c);if(v!=null)e.innerHTML=v});
-  $('#prep').innerHTML=C.summary.prep.map((t,i)=>`<li><input type="checkbox" data-k="p.${i+1}"><span>${t}</span></li>`).join('');
+  $('#prep').innerHTML=C.summary.prep.map((t,i)=>`<li><input type="checkbox" data-k="p.${i+1}"><span data-e="summary.prep.${i}">${t}</span></li>`).join('');
 }
-const KEY=rawC?'booklet-c-'+hash(rawC)+'-v1':VER==='default'?'booklet-mock-v4':'booklet-'+VER+'-v1';
+const KEY=rawB?'booklet-b-'+rawB+'-v1':rawC?'booklet-c-'+hash(rawC)+'-v1':VER==='default'?'booklet-mock-v4':'booklet-'+VER+'-v1';
 let S={};try{S=JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){}
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 let statT,statH;
@@ -310,30 +312,30 @@ const sc=(t,p,id)=>{const v=parseInt(S['w.'+t+'.'+p+'.'+id]);return v>=1&&v<=10?
 
 /* ---- בוררים קטנים: של מי, כן/לא ---- */
 const owner=k=>(S.couple&&(S['n.a']||'').trim()&&(S['n.b']||'').trim())?`<div class="seg xs" data-own="${k}">${['a','b','s'].map(v=>`<button data-ov="${v}" class="${(S[k]||'s')===v?'on':''}">${v==='s'?'משותף':pname(v)}</button>`).join('')}</div>`:'';
-const yesno=k=>`<div class="seg sm" data-yn="${k}">${['כן','לא'].map(v=>`<button data-yv="${v}" class="${S[k]===v?'on':''}">${v}</button>`).join('')}</div>`;
+const yesno=k=>`<div class="seg sm" data-yn="${k}">${['כן','לא'].map(v=>`<button data-yv="${v}" class="${S[k]===v?'on':''}">${v==='כן'?C.ui.yes:C.ui.no}</button>`).join('')}</div>`;
 
 /* ---- יעדים ---- */
 function renderGoals(){
   const n=S.goalsN||C.goals.count,c=!!S.couple;
   $('#goalsSub').textContent=C.goals.sub;
   $('#goalList').innerHTML=[...Array(n)].map((_,i)=>`<div class="goal">
-<div class="ttl"><div class="n">${i+1}</div><span>${c?'יעד/חלום':'יעד/חלום'}</span>${owner('g.'+i+'.o')}${n>1?`<button class="trash noprint" data-del="${i}" title="מחיקה" aria-label="מחיקה"><i class="ri-delete-bin-line"></i></button>`:''}</div>
+<div class="ttl"><div class="n">${i+1}</div><span data-c="ui.goalItem">${C.ui.goalItem}</span>${owner('g.'+i+'.o')}${n>1?`<button class="trash noprint" data-del="${i}" title="מחיקה" aria-label="מחיקה"><i class="ri-delete-bin-line"></i></button>`:''}</div>
 <div class="g1">
-<div class="gd"><div class="lrow"><label>${c?'תיאור היעד/החלום':'תיאור היעד/החלום'}</label></div><input type="text" data-k="g.${i}.d"></div>
-<div><div class="lrow"><label>חשיבות</label></div><select class="impsel" data-k="g.${i}.i"><option value="">–</option>${[...Array(10)].map((_,j)=>`<option>${j+1}</option>`).join('')}</select></div></div>
-<div class="g2"><div><label>מתי?</label>${dateSel('g.'+i+'.w')}</div>
-<div class="c"><label>עלות משוערת</label>${money('g.'+i+'.c')}</div>
-<div class="yn"><label>האם יש מקור כספי?</label>${yesno('g.'+i+'.s')}</div></div>
-<button class="lnk noprint" data-note="${i}"><i class="ri-add-circle-fill"></i>הוספת הערה</button>
+<div class="gd"><div class="lrow"><label data-c="ui.goalDesc">${C.ui.goalDesc}</label></div><input type="text" data-k="g.${i}.d"></div>
+<div><div class="lrow"><label data-c="ui.importance">${C.ui.importance}</label></div><select class="impsel" data-k="g.${i}.i"><option value="">–</option>${[...Array(10)].map((_,j)=>`<option>${j+1}</option>`).join('')}</select></div></div>
+<div class="g2"><div><label data-c="ui.when">${C.ui.when}</label>${dateSel('g.'+i+'.w')}</div>
+<div class="c"><label data-c="ui.cost">${C.ui.cost}</label>${money('g.'+i+'.c')}</div>
+<div class="yn"><label data-c="ui.hasSource">${C.ui.hasSource}</label>${yesno('g.'+i+'.s')}</div></div>
+<button class="lnk noprint" data-note="${i}"><i class="ri-add-circle-fill"></i><span data-c="ui.addNote">${C.ui.addNote}</span></button>
 <div class="note ${(S['g.'+i+'.n']||S['g.'+i+'.sn'])?'show':''}"><textarea data-k="g.${i}.n" placeholder="הערות"></textarea></div></div>`).join('');
 }
 function renderTop(){
   const c=!!S.couple;
   $('#curTitle').textContent=c?C.current.titleCouple:C.current.titleSingle;
-  $('#topGoals').innerHTML=[1,2].map(n=>`<div class="tgc"><div class="ttl"><div class="n">${n}</div><span>מטרה מס' ${n}</span>${owner('t'+n+'.o')}</div>
-<div class="tg"><div class="a"><label>שם המטרה</label><input type="text" data-k="t${n}.name"></div>
-<div><label>מתי?</label>${dateSel('t'+n+'.w')}</div>
-<div class="m"><label>כמה כסף?</label>${money('t'+n+'.money')}</div></div>
+  $('#topGoals').innerHTML=[1,2].map(n=>`<div class="tgc"><div class="ttl"><div class="n">${n}</div><span><span data-c="ui.topGoal">${C.ui.topGoal}</span> ${n}</span>${owner('t'+n+'.o')}</div>
+<div class="tg"><div class="a"><label data-c="ui.topName">${C.ui.topName}</label><input type="text" data-k="t${n}.name"></div>
+<div><label data-c="ui.when">${C.ui.when}</label>${dateSel('t'+n+'.w')}</div>
+<div class="m"><label data-c="ui.topMoney">${C.ui.topMoney}</label>${money('t'+n+'.money')}</div></div>
 <label style="margin-top:18px">${c?C.current.howCouple:C.current.howSingle}</label><textarea data-k="t${n}.how"></textarea></div>`).join('');
 }
 
@@ -342,7 +344,7 @@ function renderTables(){
   $('#tables').innerHTML=people().map(p=>{
     const A=areas(p);
     let h=`<div class="ptable" data-p="${p}">${S.couple?`<div class="ptitle">${pname(p)}</div>`:''}`;
-    h+=`<div class="thead"><div class="hn">תחום</div><div class="h imp"><i class="ri-star-fill"></i>כמה חשוב</div><div class="h cur"><i class="ri-emotion-happy-fill"></i>מצב קיים</div></div>`;
+    h+=`<div class="thead"><div class="hn" data-c="ui.colArea">${C.ui.colArea}</div><div class="h imp"><i class="ri-star-fill"></i><span data-c="ui.colImp">${C.ui.colImp}</span></div><div class="h cur"><i class="ri-emotion-happy-fill"></i><span data-c="ui.colCur">${C.ui.colCur}</span></div></div>`;
     A.forEach((a,i)=>{
       const empty=!a.fixed&&!a.name.trim();
       h+=`<div class="arow ${a.fixed?'fx':''} ${empty?'empty':''}"><div class="an">`+
@@ -404,7 +406,7 @@ function paintResults(){
   $('#gapNote').style.display=anyGap?'':'none';
 }
 function genWheel(animate){
-  S.gen=true;save();$('#wheelOut').style.display='block';$('#genTxt').textContent='עדכון גלגל החיים';paintResults();
+  S.gen=true;save();$('#wheelOut').style.display='block';$('#genTxt').textContent=C.ui.genUpdate;paintResults();
   if(!animate){paintWheels(1);return}
   paintWheels(0);const t0=performance.now();
   const step=t=>{const f=Math.min(1,(t-t0)/900);paintWheels(1-Math.pow(1-f,3));if(f<1)requestAnimationFrame(step)};
@@ -435,7 +437,7 @@ function renderAll(){
   document.body.classList.toggle('is-couple',!!S.couple);
   $$('#mode button').forEach(b=>b.classList.toggle('on',(b.dataset.mode==='1')===!!S.couple));
   renderGoals();renderTop();renderTables();renderSummaryLabels();fillValues();
-  if(S.gen){$('#wheelOut').style.display='block';$('#genTxt').textContent='עדכון גלגל החיים';paintResults();paintWheels(1)}
+  if(S.gen){$('#wheelOut').style.display='block';$('#genTxt').textContent=C.ui.genUpdate;paintResults();paintWheels(1)}
 }
 document.addEventListener('input',e=>{
   const el=e.target;
@@ -534,11 +536,59 @@ function spy(){
 const setNav=()=>document.documentElement.style.setProperty('--navh',$('nav').offsetHeight+'px');
 addEventListener('scroll',spy,{passive:true});addEventListener('resize',()=>{setNav();spy()});
 addEventListener('beforeprint',()=>{if(S.gen)paintWheels(1)});
+/* ---- מצב עריכה: כשהדף מוצג בתוך העורך אפשר ללחוץ על טקסט ולתקן אותו ישירות ---- */
+const EDIT=window.top!==window&&new URLSearchParams(location.search).has('p');
+const cset=(o,p,v)=>{const k=p.split('.');let c=o;k.slice(0,-1).forEach(x=>{if(c[x]==null)c[x]={};c=c[x]});c[k[k.length-1]]=v};
+const okPath=p=>{try{return !window.parent.EDITABLE||window.parent.EDITABLE.has(p)}catch(e){return true}};
+function makeEditable(){
+  if(!EDIT)return;
+  $$('[data-c],[data-e]').forEach(el=>{
+    const p=el.dataset.c||el.dataset.e;
+    if(el.dataset.ed||!okPath(p))return;
+    el.dataset.ed='1';el.contentEditable='true';el.spellcheck=false;
+  });
+}
+if(EDIT){
+  const st=document.createElement('style');
+  st.textContent='[data-ed]:hover{outline:2px dashed #F5A623;outline-offset:3px;cursor:text}[data-ed]:focus{outline:2px solid #F5A623;outline-offset:3px;background:rgba(245,166,35,.1)}';
+  document.head.appendChild(st);
+  const pathOf=e=>{const el=e.target.closest&&e.target.closest('[data-ed]');return el?[el,el.dataset.c||el.dataset.e]:[null,null]};
+  document.addEventListener('click',e=>{if(pathOf(e)[0]){e.preventDefault();e.stopPropagation()}},true);
+  document.addEventListener('keydown',e=>{
+    const [el,p]=pathOf(e);if(!el)return;
+    if(e.key==='Enter'&&p!=='welcome.lead')e.preventDefault();
+    if(e.key===' '||e.key==='Enter')e.stopPropagation();
+  },true);
+  document.addEventListener('keyup',e=>{if(pathOf(e)[0]&&(e.key===' '||e.key==='Enter')){e.preventDefault();e.stopPropagation()}},true);
+  document.addEventListener('paste',e=>{const [el]=pathOf(e);if(!el)return;e.preventDefault();document.execCommand('insertText',false,(e.clipboardData||window.clipboardData).getData('text/plain'))});
+  document.addEventListener('input',e=>{
+    const [el,p]=pathOf(e);if(!el)return;
+    const html=el.innerHTML,text=el.textContent;
+    if(el.dataset.c){
+      cset(C,p,/^(welcome\.lead|wheel\.(imp|cur))$/.test(p)?html:text);
+      $$('[data-c="'+p+'"]').forEach(o=>{if(o!==el)o.innerHTML=html});
+    }
+    window.parent.postMessage({type:'pv-edit',path:p,html,text},location.origin);
+  },true);
+  new MutationObserver(()=>makeEditable()).observe(document.body,{childList:true,subtree:true});
+}
 async function loadCfg(){
+  if(rawB){
+    const ck='booklet-bcache-'+rawB;let cfg=null,fetched=false;
+    try{
+      const r=await fetch(SB_URL+'/rest/v1/published_booklets?slug=eq.'+rawB+'&select=content',{headers:{apikey:SB_KEY,Authorization:'Bearer '+SB_KEY}});
+      if(r.ok){fetched=true;const a=await r.json();if(a.length)cfg=a[0].content}
+    }catch(e){}
+    if(fetched&&!cfg){document.body.innerHTML='<div style="max-width:520px;margin:20vh auto;text-align:center;font-size:20px;padding:20px;font-family:Alef,sans-serif;direction:rtl">הקישור הזה אינו פעיל.<br><small style="color:#6B6F76">אם קיבלת אותו מהמאמנת שלך, כדאי לבקש ממנה קישור חדש.</small></div>';throw new Error('inactive')}
+    if(cfg){try{localStorage.setItem(ck,JSON.stringify(cfg))}catch(e){}}
+    else{try{cfg=JSON.parse(localStorage.getItem(ck)||'null')}catch(e){}}
+    if(cfg){C=merge(C,cfg);DEF=C.areas.map((a,i)=>({id:i,...a}))}
+    return;
+  }
   if(!rawC)return;
   try{C=merge(C,await unpack(rawC));DEF=C.areas.map((a,i)=>({id:i,...a}))}catch(e){toast('קישור הטקסטים לא תקין')}
 }
-(async()=>{await loadCfg();if(S['g.0.d']===undefined&&S.goalsN===undefined&&C.goals.first)S['g.0.d']=C.goals.first;await loadFromHash();renderAll();setNav();spy()})();
+(async()=>{await loadCfg();if(S['g.0.d']===undefined&&S.goalsN===undefined&&C.goals.first)S['g.0.d']=C.goals.first;await loadFromHash();renderAll();setNav();spy();makeEditable()})();
 </script>
 </body>
 </html>

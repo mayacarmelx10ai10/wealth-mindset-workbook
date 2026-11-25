@@ -48,6 +48,15 @@ window.VERSIONS.default = {
     subject: 'המילוי שלי בחוברת מיינדסט של עשירים',
     body: 'שלום, זה המילוי שלי בחוברת:'
   },
+  /* תוויות קבועות שנראות בחוברת */
+  ui: {
+    modeSingle: 'יחיד', modeCouple: 'אנחנו ממלאים כזוג', autosave: 'נשמר אוטומטית במכשיר הזה',
+    goalItem: 'יעד/חלום', goalDesc: 'תיאור היעד/החלום', importance: 'חשיבות', when: 'מתי?',
+    cost: 'עלות משוערת', hasSource: 'האם יש מקור כספי?', yes: 'כן', no: 'לא', addNote: 'הוספת הערה',
+    topGoal: "מטרה מס'", topName: 'שם המטרה', topMoney: 'כמה כסף?',
+    colArea: 'תחום', colImp: 'כמה חשוב', colCur: 'מצב קיים', gen: 'יצירת גלגל החיים', genUpdate: 'עדכון גלגל החיים',
+    saveLink: 'שמירת הקובץ כקישור', saveLinkCap: 'מאפשר לחזור ולהמשיך', savePdf: 'שמירה כ-PDF', savePdfCap: 'עותק לקריאה והדפסה'
+  },
   areas: [
     { name: 'ניהול ההון האישי', icon: 'ri-coin-fill', fixed: true },
     { name: 'קריירה', icon: 'ri-briefcase-4-fill' },

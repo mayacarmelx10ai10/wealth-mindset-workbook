@@ -6,6 +6,7 @@
 <title>עריכת הטקסטים של החוברת</title>
 <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap" rel="stylesheet">
 <script src="versions/default.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{--bg:#FAF8F4;--ink:#14161B;--mute:#6B6F76;--line:#ECE7DD;--sand:#F1EDE4;--amber:#F5A623}
 *{box-sizing:border-box}
@@ -44,7 +45,13 @@ button.sm{font-size:15px;padding:7px 14px;font-weight:400}
   .steps::-webkit-scrollbar{display:none}
   .steps button{flex:none;width:auto;border-radius:99px;padding:9px 16px 9px 12px;font-size:16px}
 }
-section.hid{display:none}
+section.hid,div.hid{display:none!important}
+body.noapp .bar{display:none}
+.who{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:16px;color:var(--mute);margin:6px 2px 0}
+.badge{border-radius:99px;padding:3px 12px;font-size:14px;background:var(--sand);color:var(--ink)}
+.badge.ok{background:#DFF3E6}
+.badge.wait{background:#FFE9B8}
+#auth{max-width:520px;margin:30px auto}
 #fin h2{margin-bottom:10px}
 #fin .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 a{color:var(--ink)}
@@ -57,20 +64,29 @@ a{color:var(--ink)}
 .fields input:focus,.fields textarea:focus{outline-color:var(--amber)}
 </style>
 </head>
-<body>
+<body class="noapp">
 <div class="wrap">
 <h1>עריכת הטקסטים של החוברת</h1>
 <p class="lead">כאן משנים את כל הטקסטים, בלי לגעת בקוד. המבנה נשאר זהה: יעדים וחלומות, מטרות נוכחיות ומעגל החיים. בסוף מקבלים קישור אחד לשליחה ללקוחות. הטיוטה נשמרת אוטומטית במחשב הזה.</p>
-<div class="layout"><div class="steps" id="steps"></div><div class="main">
+<div id="who" class="who hid"><span id="whoMail"></span><span class="badge" id="badge"></span><button class="alt sm" id="signout">יציאה</button></div>
+<section id="auth"><h2>כניסה למאמנות</h2>
+<p class="hint">הזיני את כתובת המייל שלך ונשלח אליך קישור כניסה. בלי סיסמה. כל מה שתכתבי נשמר בחשבון שלך, ואפשר לחזור ולערוך בכל זמן.</p>
+<label for="authEmail">כתובת מייל</label><input id="authEmail" type="email" autocomplete="email" dir="ltr" style="text-align:left">
+<div class="btns" style="display:flex;gap:10px;margin-top:14px"><button id="authSend">שליחת קישור כניסה</button></div>
+<p class="hint" id="authMsg" style="margin-top:12px"></p></section>
+<div id="appwrap" class="hid"><div class="layout"><div class="steps" id="steps"></div><div class="main">
 <div id="form"></div>
 <section id="fin" class="hid"><h2>סיימנו. הקישור ללקוחות</h2>
-<p class="hint">הקישור מכיל את כל הטקסטים ששינית. שלחי אותו ללקוחות, למשל ב-WhatsApp או במייל. אפשר לחזור לכל שלב ולתקן, והקישור יתעדכן.</p>
+<p class="hint" id="finStatus"></p>
+<label for="slug">הכתובת הקצרה שלך (אותיות באנגלית, מספרים ומקף, 3 עד 30 תווים)</label>
+<input id="slug" type="text" dir="ltr" style="text-align:left" placeholder="למשל: shiri">
+<p class="hint" id="slugMsg" style="margin-top:6px"></p>
 <div class="btns"><button id="copy">העתקת קישור ללקוחות</button><button class="alt" id="open">פתיחה בדף מלא</button></div>
-<h2 style="margin-top:26px">שמירה, כדי לא לאבד</h2>
-<p class="hint">הכתובת של הדף הזה מתעדכנת אוטומטית עם כל מה שכתבת. כדי לחזור ולערוך בהמשך, שמרי את הקישור הבא (למשל במייל לעצמך או בסימניות).</p>
-<div class="btns"><button id="copyEdit">העתקת קישור לעריכה</button><button class="alt" id="dl">הורדת קובץ גיבוי</button></div>
+<h2 style="margin-top:26px">גיבוי</h2>
+<p class="hint">הכול נשמר אוטומטית בחשבון שלך. אפשר להוריד גם עותק לקובץ.</p>
+<div class="btns"><button class="alt" id="dl">הורדת קובץ גיבוי</button></div>
 <button class="alt sm reset" id="reset">איפוס כל הטקסטים למקור</button></section>
-</div></div>
+</div></div></div>
 </div>
 <div class="bar"><div class="pbar" style="position:absolute;left:0;right:0;top:0"><i id="pf"></i></div><div class="in">
 <button class="alt" id="prev">הקודם</button><span class="prog" id="prog"></span><button id="next">הבא</button>
@@ -93,15 +109,15 @@ const htmlToItem=h=>unbold(h).replace(/<small>/g,'\n').replace(/<\/small>/g,'').
 
 /* ---- הגדרת השדות ---- */
 const F=[
- {t:'התפריט העליון',a:'#top',f:[['nav.0','פריט 1','line'],['nav.1','פריט 2','line'],['nav.2','פריט 3','line'],['nav.3','פריט 4','line'],['nav.4','פריט 5','line']]},
- {t:'ברוכים הבאים',a:'#welcome',h:'לפסקה חדשה משאירים שורה ריקה. הדגשה: **כך**.',f:[['welcome.h1','כותרת','line'],['welcome.lead','טקסט הפתיחה','paras'],['welcome.modeLabel','השאלה על אופן המילוי','line'],['welcome.coupleNote','הסבר למילוי כזוג','area']]},
- {t:'יעדים וחלומות',a:'#goals',f:[['goals.title','כותרת','line'],['goals.add','כיתוב כפתור ההוספה','line'],['goals.sub','הסבר מתחת לכותרת','area'],['goals.count','כמה יעדים להציג מראש','num'],['goals.first','היעד הראשון, מוכן מראש (אפשר להשאיר ריק)','line']]},
- {t:'מטרות נוכחיות',a:'#current',f:[['current.titleSingle','כותרת, ביחיד','line'],['current.titleCouple','כותרת, בזוג','line'],['current.howSingle','שאלה, ביחיד','line'],['current.howCouple','שאלה, בזוג','line']]},
- {t:'מעגל החיים',a:'#wheel',h:'הדגשה: **כך**.',f:[['wheel.title','כותרת','line'],['wheel.sub','הסבר מתחת לכותרת','area'],['wheel.imp','הוראה: כמה חשוב','bold'],['wheel.cur','הוראה: מצב קיים','bold'],['areas','התחומים בטבלה, תחום בכל שורה. הראשון הוא קבוע ואי אפשר לשנות אותו בחוברת. אפשר עד 14 תחומים, והלקוחות מוסיפים בעצמם.','areas'],['wheel.gapNote','הערה מתחת לתוצאות','area'],['wheel.key.0','תיבה צהובה: נקודה 1','area'],['wheel.key.1','תיבה צהובה: נקודה 2','area'],['wheel.keyNote','תיבה צהובה: טקסט סיום','area']]},
- {t:'סיכום ומה להכין לפגישה הבאה',a:'#summary',h:'שלוש השאלות מופיעות בניסוח ליחיד ובניסוח לזוג.',f:[['summary.title','כותרת','line'],['summary.single.0','שאלה 1, ביחיד','line'],['summary.single.1','שאלה 2, ביחיד','line'],['summary.single.2','שאלה 3, ביחיד','line'],['summary.couple.0','שאלה 1, בזוג','line'],['summary.couple.1','שאלה 2, בזוג','line'],['summary.couple.2','שאלה 3, בזוג','line'],['summary.prepTitle','כותרת "מה להכין"','line'],['summary.prepSub','הסבר','area'],['summary.prep.0','פריט 1 (שורות נוספות הופכות לשורות קטנות מתחתיו)','item'],['summary.prep.1','פריט 2','item'],['summary.prep.2','פריט 3','item'],['summary.prepNote','הערה בסוף','area']]},
- {t:'המייל שלך',a:'#save',h:'אחרי שמילאת כתובת, מופיע ללקוחות בסוף החוברת כפתור "שליחה אליך". הוא פותח מייל מוכן אליך עם הקישור למילוי שלהם.',f:[
-  ['coach.email','כתובת המייל שלך','line'],['coach.label','כיתוב הכפתור','line'],['coach.cap','שורה מתחת לכפתור','line'],['coach.subject','נושא המייל','line'],['coach.body','פתיחת המייל','line']]}
+ {t:'התפריט העליון',a:'#top',h:'אפשר גם ללחוץ על הטקסט בתצוגה ולתקן אותו שם ישירות.',f:[['nav.0','פריט 1','line'],['nav.1','פריט 2','line'],['nav.2','פריט 3','line'],['nav.3','פריט 4','line'],['nav.4','פריט 5','line']]},
+ {t:'ברוכים הבאים',a:'#welcome',h:'לפסקה חדשה משאירים שורה ריקה. הדגשה: **כך**.',f:[['welcome.h1','כותרת','line'],['ui.autosave','הודעת שמירה אוטומטית','line'],['welcome.lead','טקסט הפתיחה','paras'],['welcome.modeLabel','השאלה על אופן המילוי','line'],['ui.modeSingle','כפתור: מילוי ליחיד','line'],['ui.modeCouple','כפתור: מילוי כזוג','line']]},
+ {t:'יעדים וחלומות',a:'#goals',f:[['goals.title','כותרת','line'],['goals.add','כיתוב כפתור ההוספה','line'],['goals.sub','הסבר מתחת לכותרת','area'],['goals.count','כמה יעדים להציג מראש','num'],['goals.first','היעד הראשון, מוכן מראש (אפשר להשאיר ריק)','line'],['ui.goalItem','כותרת כל יעד','line'],['ui.goalDesc','כיתוב שדה התיאור','line'],['ui.importance','כיתוב: חשיבות','line'],['ui.when','כיתוב: מתי','line'],['ui.cost','כיתוב: עלות','line'],['ui.hasSource','כיתוב: מקור כספי','line'],['ui.yes','כפתור: כן','line'],['ui.no','כפתור: לא','line'],['ui.addNote','כפתור: הוספת הערה','line']]},
+ {t:'מטרות נוכחיות',a:'#current',f:[['current.titleSingle','כותרת','line'],['ui.topGoal','כותרת כל מטרה (לפני המספר)','line'],['ui.topName','כיתוב: שם המטרה','line'],['ui.topMoney','כיתוב: כמה כסף','line'],['current.howSingle','שאלה','line']]},
+ {t:'מעגל החיים',a:'#wheel',h:'הדגשה: **כך**.',f:[['wheel.title','כותרת','line'],['wheel.sub','הסבר מתחת לכותרת','area'],['wheel.imp','הוראה: כמה חשוב','bold'],['wheel.cur','הוראה: מצב קיים','bold'],['ui.colArea','כותרת עמודה: תחום','line'],['ui.colImp','כותרת עמודה: כמה חשוב','line'],['ui.colCur','כותרת עמודה: מצב קיים','line'],['areas','התחומים בטבלה, תחום בכל שורה. הראשון הוא קבוע ואי אפשר לשנות אותו בחוברת. אפשר עד 14 תחומים, והלקוחות מוסיפים בעצמם.','areas'],['ui.gen','כפתור יצירת הגלגל','line'],['wheel.gapNote','הערה מתחת לתוצאות','area'],['wheel.key.0','תיבה צהובה: נקודה 1','area'],['wheel.key.1','תיבה צהובה: נקודה 2','area'],['wheel.keyNote','תיבה צהובה: טקסט סיום','area']]},
+ {t:'סיכום ומה להכין לפגישה הבאה',a:'#summary',f:[['summary.title','כותרת','line'],['summary.single.0','שאלה 1','line'],['summary.single.1','שאלה 2','line'],['summary.single.2','שאלה 3','line'],['summary.prepTitle','כותרת "מה להכין"','line'],['summary.prepSub','הסבר','area'],['summary.prep.0','פריט 1 (שורות נוספות הופכות לשורות קטנות מתחתיו)','item'],['summary.prep.1','פריט 2','item'],['summary.prep.2','פריט 3','item'],['summary.prepNote','הערה בסוף','area']]},
+ {t:'שמירה ושליחה',a:'#save',h:'אחרי שמילאת כתובת מייל, מופיע ללקוחות בסוף החוברת כפתור "שליחה אליך", שפותח מייל מוכן אליך עם הקישור למילוי שלהם.',f:[['ui.saveLink','כפתור: שמירה כקישור','line'],['ui.saveLinkCap','שורה מתחתיו','line'],['ui.savePdf','כפתור: שמירה כ-PDF','line'],['ui.savePdfCap','שורה מתחתיו','line'],['coach.email','כתובת המייל שלך','line'],['coach.label','כיתוב כפתור השליחה אליך','line'],['coach.cap','שורה מתחת לכפתור','line'],['coach.subject','נושא המייל','line'],['coach.body','פתיחת המייל','line']]}
 ];
+window.EDITABLE=new Set(F.flatMap(s=>s.f.map(x=>x[0])).concat(['areas']));
 
 const get=(o,p)=>p.split('.').reduce((x,k)=>x==null?x:x[k],o);
 function set(o,p,v){const k=p.split('.');let c=o;k.slice(0,-1).forEach((x,i)=>{if(c[x]==null)c[x]=/^\d+$/.test(k[i+1])?[]:{};c=c[x]});c[k[k.length-1]]=v}
@@ -190,7 +206,29 @@ async function refresh(si){
 }
 const refreshAll=()=>F.forEach((_,i)=>refresh(i));
 let urlT;
-function saveUrl(){clearTimeout(urlT);urlT=setTimeout(async()=>{try{const cfg=build();const base=location.href.split('#')[0].split('?')[0];history.replaceState(null,'',Object.keys(cfg).length?base+'?c='+await pack(cfg):base)}catch(e){}},500)}
+function saveUrlOld(){clearTimeout(urlT);urlT=setTimeout(async()=>{try{const cfg=build();const base=location.href.split('#')[0].split('?')[0];history.replaceState(null,'',Object.keys(cfg).length?base+'?c='+await pack(cfg):base)}catch(e){}},500)}
+addEventListener('message',e=>{
+  if(e.origin!==location.origin||!e.data||e.data.type!=='pv-edit')return;
+  const {path,html,text}=e.data;
+  const f=F.flatMap(x=>x.f).find(x=>x[0]===path);if(!f)return;
+  const ty=f[2];let v;
+  if(ty==='paras')v=htmlToParas(html);
+  else if(ty==='bold')v=unbold(html.replace(/<(?!\/?b>)[^>]+>/g,''));
+  else if(ty==='item')v=htmlToItem(html);
+  else v=text.replace(/\s+/g,' ').trim();
+  V[path]=v;
+  const inp=document.getElementById('f_'+path.replace(/\./g,'_'));if(inp)inp.value=v;
+  saveUrl();
+  const si=F.findIndex(x=>x.f.some(y=>y[0]===path));if(si>=0&&si!==STEP)showStep(si);
+});
+let svT;
+function saveUrl(){clearTimeout(svT);svT=setTimeout(saveNow,900)}
+async function saveNow(){
+  try{localStorage.setItem(KEY,JSON.stringify(V))}catch(e){}
+  if(!ME)return;
+  const {error}=await sb.from('coaches').update({content:build()}).eq('id',ME.id);
+  say(error?'השמירה נכשלה. בדקי חיבור לאינטרנט.':'נשמר בחשבון שלך');
+}
 function schedule(si){clearTimeout(timers[si]);timers[si]=setTimeout(()=>refresh(si),700);saveUrl()}
 /* הדגשת הרכיב בתצוגה המקדימה */
 function pvSelector(p){
@@ -241,11 +279,14 @@ async function makeLink(){
   return base+'?c='+await pack(cfg);
 }
 const say=t=>{$('#msg').textContent=t};
+const base0=()=>location.href.split('#')[0].split('?')[0];
+const clientLink=()=>ROW&&ROW.approved&&ROW.slug?base0().replace(/[^/]*$/,'')+'?b='+ROW.slug:'';
 $('#copy').onclick=async()=>{
-  const url=await makeLink();
+  const url=clientLink();
+  if(!url){say(ROW&&ROW.approved?'בחרי קודם כתובת קצרה.':'הקישור יופעל אחרי שמאיה תאשר את הגישה שלך.');return}
   try{await navigator.clipboard.writeText(url);say('הקישור הועתק. שלחו אותו ללקוחות, למשל ב-WhatsApp או במייל.')}catch(e){prompt('העתיקו את הקישור:',url)}
 };
-$('#open').onclick=async()=>{window.open(await makeLink(),'_blank')};
+$('#open').onclick=async()=>{window.open(clientLink()||await makeLink(),'_blank')};
 $('#dl').onclick=()=>{
   const cfg=build();const name=(prompt('שם הגרסה באנגלית, לקובץ (למשל shiri):','mycoach')||'').toLowerCase().replace(/[^a-z0-9_-]/g,'');
   if(!name)return;
@@ -254,21 +295,55 @@ $('#dl').onclick=()=>{
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/javascript'}));a.download=name+'.js';a.click();
   say('הורד הקובץ '+name+'.js. אפשר להוסיף אותו לתיקיית versions באתר.');
 };
-$('#copyEdit').onclick=async()=>{
-  const cfg=build();const base=location.href.split('#')[0].split('?')[0];
-  const url=Object.keys(cfg).length?base+'?c='+await pack(cfg):base;
-  try{await navigator.clipboard.writeText(url);say('הקישור לעריכה הועתק. שמרי אותו.')}catch(e){prompt('העתיקי ושמרי את הקישור:',url)}
-};
 $('#prev').onclick=()=>showStep(STEP-1);
 $('#next').onclick=()=>showStep(STEP+1);
 $('#reset').onclick=()=>{if(!confirm('לאפס את כל הטקסטים לטקסטים המקוריים?'))return;try{localStorage.removeItem(KEY)}catch(e){}loadFrom({});render();showStep(F.length);say('הטקסטים אופסו.')};
 
+/* ---- כניסה ושמירה בשרת ---- */
+const SB_URL='https://fdaixsvbzxwaqyjbaopy.supabase.co',SB_KEY='sb_publishable_r6dQ9CVqgXU0LJj_B0CWAw_6goNHgki';
+let sb,ME=null,ROW=null,booted=false;
+function showAuth(){document.body.classList.add('noapp');$('#auth').classList.remove('hid');$('#appwrap').classList.add('hid');$('#who').classList.add('hid')}
+function paintStatus(){
+  $('#whoMail').textContent=ME.email;
+  const b=$('#badge');b.className='badge '+(ROW.approved?'ok':'wait');b.textContent=ROW.approved?'מאושרת':'ממתינה לאישור של מאיה';
+  const st=$('#finStatus');
+  st.textContent=ROW.approved?(ROW.slug?'הקישור ללקוחות פעיל. כל שינוי שתעשי מופיע בו מיד.':'הגישה שלך מאושרת. בחרי כתובת קצרה כדי לקבל קישור ללקוחות.'):'הבקשה שלך התקבלה. אפשר לערוך ולשמור כרגיל. הקישור ללקוחות יופעל אחרי שמאיה תאשר.';
+  $('#slug').value=ROW.slug||'';
+}
+async function boot(session){
+  if(booted)return;booted=true;ME=session.user;
+  let {data:row}=await sb.from('coaches').select('*').eq('id',ME.id).maybeSingle();
+  if(!row){const r=await sb.from('coaches').insert({id:ME.id,email:ME.email}).select().single();row=r.data}
+  ROW=row||{approved:false,content:{}};
+  let cfg=ROW.content&&Object.keys(ROW.content).length?ROW.content:null;
+  if(!cfg){const c=new URLSearchParams(location.search).get('c');if(c){try{cfg=await unpack(c)}catch(e){}}}
+  if(cfg)loadFrom(cfg);
+  else{try{const sv=JSON.parse(localStorage.getItem(KEY)||'null');if(sv){loadFrom({});Object.assign(V,sv)}else loadFrom({})}catch(e){loadFrom({})}}
+  document.body.classList.remove('noapp');$('#auth').classList.add('hid');$('#appwrap').classList.remove('hid');$('#who').classList.remove('hid');
+  paintStatus();render();
+}
+$('#authSend').onclick=async()=>{
+  const email=$('#authEmail').value.trim();if(!/^\S+@\S+\.\S+$/.test(email)){$('#authMsg').textContent='כתובת המייל לא תקינה.';return}
+  $('#authMsg').textContent='שולחת...';
+  const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:base0()}});
+  $('#authMsg').textContent=error?'לא הצלחנו לשלוח: '+error.message:'נשלח קישור אל '+email+'. פתחי אותו באותו מכשיר כדי להיכנס.';
+};
+$('#signout').onclick=async()=>{await sb.auth.signOut();location.href=base0()};
+let slugT;
+$('#slug').addEventListener('input',()=>{
+  clearTimeout(slugT);slugT=setTimeout(async()=>{
+    const v=$('#slug').value.trim().toLowerCase(),m=$('#slugMsg');
+    if(!/^[a-z0-9][a-z0-9-]{2,29}$/.test(v)){m.textContent='3 עד 30 תווים: אותיות באנגלית, מספרים ומקף.';return}
+    const {error}=await sb.from('coaches').update({slug:v}).eq('id',ME.id);
+    if(error){m.textContent=error.code==='23505'?'הכתובת הזאת תפוסה. בחרי אחרת.':'לא נשמר: '+error.message;return}
+    ROW.slug=v;m.textContent='נשמר.';paintStatus();$('#slug').value=v;
+  },700);
+});
 (async()=>{
-  let cfg={};
-  const c=new URLSearchParams(location.search).get('c');
-  if(c){try{cfg=await unpack(c)}catch(e){}}
-  else{try{const sv=JSON.parse(localStorage.getItem(KEY)||'null');if(sv){loadFrom({});Object.assign(V,sv);render();return}}catch(e){}}
-  loadFrom(cfg);render();
+  sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,detectSessionInUrl:true}});
+  sb.auth.onAuthStateChange((ev,sess)=>{if(sess&&!booted)boot(sess)});
+  const {data}=await sb.auth.getSession();
+  if(data.session)await boot(data.session);else showAuth();
 })();
 </script>
 </body>
