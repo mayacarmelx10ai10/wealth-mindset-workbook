@@ -28,38 +28,51 @@ button.alt{background:var(--sand);color:var(--ink);border:1px solid #D9D3C6}
 button.sm{font-size:15px;padding:7px 14px;font-weight:400}
 .msg{max-width:1120px;margin:8px auto 0;font-size:16px;text-align:center;color:var(--mute);min-height:24px}
 .reset{margin-top:10px}
-.steps{display:flex;gap:6px;overflow-x:auto;padding:4px 2px 10px;scrollbar-width:none;margin-top:6px}
-.steps::-webkit-scrollbar{display:none}
-.steps button{flex:none;display:flex;align-items:center;gap:8px;background:#fff;color:var(--mute);border:1px solid var(--line);border-radius:99px;padding:7px 14px 7px 12px;font-size:15px;font-weight:400}
-.steps button b{width:22px;height:22px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-size:12px;color:var(--mute)}
-.steps button.on{background:var(--ink);color:#fff;font-weight:700}
+.layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;align-items:start;margin-top:10px}
+.steps{position:sticky;top:14px;display:flex;flex-direction:column;gap:6px}
+.steps button{display:flex;align-items:center;gap:10px;background:#fff;color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:11px 14px;font-size:16px;font-weight:400;text-align:start;width:100%}
+.steps button b{flex:none;width:26px;height:26px;border-radius:50%;background:var(--sand);display:grid;place-items:center;font-size:13px;color:var(--mute)}
+.steps button:hover{border-color:var(--ink)}
+.steps button.on{background:var(--ink);color:#fff;font-weight:700;border-color:var(--ink)}
 .steps button.on b{background:#fff;color:var(--ink)}
 .steps button.done b{background:#2E9E57;color:#fff}
 .prog{font-size:15px;color:var(--mute);margin:2px 2px 0}
+.pbar{height:4px;background:var(--line)}.pbar i{display:block;height:100%;background:var(--ink);width:0;transition:width .25s}
+@media(max-width:1000px){
+  .layout{display:block}
+  .steps{position:sticky;top:0;z-index:20;flex-direction:row;overflow-x:auto;background:rgba(250,248,244,.98);padding:10px 4px;margin:0 -4px 8px;scrollbar-width:none;border-bottom:1px solid var(--line)}
+  .steps::-webkit-scrollbar{display:none}
+  .steps button{flex:none;width:auto;border-radius:99px;padding:9px 16px 9px 12px;font-size:16px}
+}
 section.hid{display:none}
 #fin h2{margin-bottom:10px}
 #fin .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 a{color:var(--ink)}
-.row{display:grid;grid-template-columns:minmax(0,1fr) 400px;gap:22px;align-items:start}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:22px;align-items:start}
 .pv{position:sticky;top:14px}
 .pvt{font-size:15px;color:var(--mute);margin-bottom:6px;display:flex;align-items:center;gap:6px}
 .pvt i{width:8px;height:8px;border-radius:50%;background:#2E9E57;display:inline-block}
-.pv iframe{width:100%;height:600px;border:1px solid #D9D3C6;border-radius:20px;background:#FAF8F4}
-@media(max-width:900px){.row{grid-template-columns:1fr}.pv{position:static}.pv iframe{height:480px}}
+.pv iframe{width:100%;height:calc(100vh - 90px);min-height:520px;border:1px solid #D9D3C6;border-radius:20px;background:#FAF8F4}
+@media(max-width:1100px){.row{grid-template-columns:1fr}.pv{position:static}.pv iframe{height:560px;min-height:0}}
+.fields input:focus,.fields textarea:focus{outline-color:var(--amber)}
 </style>
 </head>
 <body>
 <div class="wrap">
 <h1>עריכת הטקסטים של החוברת</h1>
 <p class="lead">כאן משנים את כל הטקסטים, בלי לגעת בקוד. המבנה נשאר זהה: יעדים וחלומות, מטרות נוכחיות ומעגל החיים. בסוף מקבלים קישור אחד לשליחה ללקוחות. הטיוטה נשמרת אוטומטית במחשב הזה.</p>
-<div class="steps" id="steps"></div>
+<div class="layout"><div class="steps" id="steps"></div><div class="main">
 <div id="form"></div>
 <section id="fin" class="hid"><h2>סיימנו. הקישור ללקוחות</h2>
 <p class="hint">הקישור מכיל את כל הטקסטים ששינית. שלחי אותו ללקוחות, למשל ב-WhatsApp או במייל. אפשר לחזור לכל שלב ולתקן, והקישור יתעדכן.</p>
-<div class="btns"><button id="copy">העתקת קישור ללקוחות</button><button class="alt" id="open">פתיחה בדף מלא</button><button class="alt" id="dl">הורדת קובץ גרסה</button></div>
+<div class="btns"><button id="copy">העתקת קישור ללקוחות</button><button class="alt" id="open">פתיחה בדף מלא</button></div>
+<h2 style="margin-top:26px">שמירה, כדי לא לאבד</h2>
+<p class="hint">הכתובת של הדף הזה מתעדכנת אוטומטית עם כל מה שכתבת. כדי לחזור ולערוך בהמשך, שמרי את הקישור הבא (למשל במייל לעצמך או בסימניות).</p>
+<div class="btns"><button id="copyEdit">העתקת קישור לעריכה</button><button class="alt" id="dl">הורדת קובץ גיבוי</button></div>
 <button class="alt sm reset" id="reset">איפוס כל הטקסטים למקור</button></section>
+</div></div>
 </div>
-<div class="bar"><div class="in">
+<div class="bar"><div class="pbar" style="position:absolute;left:0;right:0;top:0"><i id="pf"></i></div><div class="in">
 <button class="alt" id="prev">הקודם</button><span class="prog" id="prog"></span><button id="next">הבא</button>
 </div><div class="msg" id="msg"></div></div>
 
@@ -144,6 +157,8 @@ function showStep(i){
   $('#fin').classList.toggle('hid',STEP!==F.length);
   $('#steps').innerHTML=[...F.map(x=>x.t),'סיום'].map((t,k)=>`<button data-st="${k}" class="${k===STEP?'on':k<STEP?'done':''}"><b>${k<STEP?'✓':k+1}</b>${t}</button>`).join('');
   $('#prog').textContent='שלב '+(STEP+1)+' מתוך '+N();
+  $('#pf').style.width=((STEP+1)/N()*100)+'%';
+  const on=document.querySelector('#steps .on');if(on&&on.scrollIntoView)on.scrollIntoView({block:'nearest',inline:'center'});
   $('#prev').style.visibility=STEP===0?'hidden':'visible';
   $('#next').style.visibility=STEP===N()-1?'hidden':'visible';
   $('#next').textContent=STEP===N()-2?'לסיום':'הבא';
@@ -173,7 +188,36 @@ async function refresh(si){
   fr.src=next;
 }
 const refreshAll=()=>F.forEach((_,i)=>refresh(i));
-function schedule(si){clearTimeout(timers[si]);timers[si]=setTimeout(()=>refresh(si),700)}
+let urlT;
+function saveUrl(){clearTimeout(urlT);urlT=setTimeout(async()=>{try{const cfg=build();const base=location.href.split('#')[0].split('?')[0];history.replaceState(null,'',Object.keys(cfg).length?base+'?c='+await pack(cfg):base)}catch(e){}},500)}
+function schedule(si){clearTimeout(timers[si]);timers[si]=setTimeout(()=>refresh(si),700);saveUrl()}
+/* הדגשת הרכיב בתצוגה המקדימה */
+function pvSelector(p){
+  let m;
+  if((m=p.match(/^nav\.(\d)$/)))return '#nav a:nth-child('+(+m[1]+1)+')';
+  if((m=p.match(/^wheel\.key\.(\d)$/)))return '.key li:nth-child('+(+m[1]+1)+')';
+  if((m=p.match(/^summary\.(single|couple)\.(\d)$/)))return '#sl'+(+m[2]+1);
+  if((m=p.match(/^summary\.prep\.(\d)$/)))return '#prep li:nth-child('+(+m[1]+1)+')';
+  if(p==='areas')return '#tables';
+  if(p.startsWith('coach.'))return '#sendBox';
+  if(p==='goals.count'||p==='goals.first')return '#goalList .goal:first-child';
+  if(p==='current.titleSingle'||p==='current.titleCouple')return '#curTitle';
+  if(p==='current.howSingle'||p==='current.howCouple')return '#topGoals label:last-of-type';
+  if(p==='goals.sub')return '#goalsSub';
+  return '[data-c="'+p+'"]';
+}
+let lastFocus=null;
+function highlight(fr,p){
+  try{
+    const d=fr.contentDocument;if(!d||!d.body)return;
+    if(!d.getElementById('pvhl')){const st=d.createElement('style');st.id='pvhl';st.textContent='.pvhl{outline:3px solid #F5A623!important;outline-offset:5px;border-radius:10px;background:rgba(245,166,35,.12)!important}';d.head.appendChild(st)}
+    d.querySelectorAll('.pvhl').forEach(x=>x.classList.remove('pvhl'));
+    const el=d.querySelector(pvSelector(p));
+    if(el){const sh=d.querySelector('.sh');if(sh)sh.style.position='static';el.classList.add('pvhl');el.scrollIntoView({block:'center'})}
+  }catch(e){}
+}
+document.addEventListener('focusin',e=>{const p=e.target.dataset&&e.target.dataset.p;if(!p)return;const sec=e.target.closest('section');if(!sec)return;const fr=sec.querySelector('iframe');lastFocus={p,fr};highlight(fr,p)});
+document.addEventListener('load',e=>{if(e.target.tagName==='IFRAME'&&lastFocus&&lastFocus.fr===e.target)setTimeout(()=>highlight(e.target,lastFocus.p),250)},true);
 document.addEventListener('input',e=>{const p=e.target.dataset&&e.target.dataset.p;if(!p)return;V[p]=e.target.value;try{localStorage.setItem(KEY,JSON.stringify(V))}catch(x){}const sec=e.target.closest('section');if(sec)schedule(+sec.dataset.si)});
 
 /* ---- קישור ---- */
@@ -209,6 +253,11 @@ $('#dl').onclick=()=>{
   const txt='window.VERSIONS = window.VERSIONS || {};\nwindow.VERSIONS.'+JSON.stringify(name).slice(1,-1)+' = '+JSON.stringify(cfg,null,2)+';\n';
   const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/javascript'}));a.download=name+'.js';a.click();
   say('הורד הקובץ '+name+'.js. אפשר להוסיף אותו לתיקיית versions באתר.');
+};
+$('#copyEdit').onclick=async()=>{
+  const cfg=build();const base=location.href.split('#')[0].split('?')[0];
+  const url=Object.keys(cfg).length?base+'?c='+await pack(cfg):base;
+  try{await navigator.clipboard.writeText(url);say('הקישור לעריכה הועתק. שמרי אותו.')}catch(e){prompt('העתיקי ושמרי את הקישור:',url)}
 };
 $('#prev').onclick=()=>showStep(STEP-1);
 $('#next').onclick=()=>showStep(STEP+1);
