@@ -48,11 +48,12 @@ button.sm{font-size:15px;padding:7px 14px;font-weight:400}
 section.hid,div.hid{display:none!important}
 body.noapp .bar,body.noapp .lead{display:none}
 body.noapp #who{display:none!important}
-.who{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:16px;color:var(--mute);margin:6px 2px 0}
+.wrap{position:relative}
+.who{position:absolute;top:10px;left:2px;direction:ltr;font-size:15px;color:var(--mute)}
 .badge{border-radius:99px;padding:3px 12px;font-size:14px;background:var(--sand);color:var(--ink)}
 .badge.ok{background:#DFF3E6}
 .badge.wait{background:#FFE9B8}
-#auth,#req,#wait{max-width:520px;margin:30px auto}
+#req,#wait{max-width:520px;margin:30px auto}
 #fin h2{margin-bottom:10px}
 #fin .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 a{color:var(--ink)}
@@ -67,20 +68,16 @@ a{color:var(--ink)}
 </head>
 <body class="noapp">
 <div class="wrap">
-<h1>עריכת הטקסטים של החוברת</h1>
+<h1>עריכת הטקסטים של ״אימון כלכלי - חוברת הכנה״</h1>
 <p class="lead">כאן משנים את כל הטקסטים, בלי לגעת בקוד. המבנה נשאר זהה: יעדים וחלומות, מטרות נוכחיות ומעגל החיים. בסוף מקבלים קישור אחד לשליחה ללקוחות. הטיוטה נשמרת אוטומטית במחשב הזה.</p>
-<div id="who" class="who hid"><span id="whoMail"></span><span class="badge" id="badge"></span><button class="alt sm" id="signout">יציאה</button></div>
+<div id="who" class="who hid"><span id="whoMail"></span></div>
 <section id="req"><h2>בקשת גישה לעורך</h2>
 <p class="hint">הגישה לעורך ניתנת באישור של מאיה. השאירי שם וכתובת מייל. כשהבקשה תאושר יישלח אלייך מייל עם כל מה שצריך כדי להתחיל.</p>
 <label for="reqName">שם</label><input id="reqName" type="text" autocomplete="name">
 <label for="reqEmail" style="margin-top:10px">כתובת מייל</label><input id="reqEmail" type="email" autocomplete="email" dir="ltr" style="text-align:left">
 <div class="btns" style="display:flex;gap:10px;margin-top:14px"><button id="reqSend">שליחת בקשה</button></div>
 <p class="hint" id="reqMsg" style="margin-top:12px"></p></section>
-<section id="auth"><h2>כבר אושרת? כניסה</h2>
-<p class="hint">הזיני את כתובת המייל שאושרה ונשלח אליך קישור כניסה. בלי סיסמה.</p>
-<label for="authEmail">כתובת מייל</label><input id="authEmail" type="email" autocomplete="email" dir="ltr" style="text-align:left">
-<div class="btns" style="display:flex;gap:10px;margin-top:14px"><button id="authSend">שליחת קישור כניסה</button></div>
-<p class="hint" id="authMsg" style="margin-top:12px"></p></section>
+
 <section id="wait" class="hid"><h2>הבקשה שלך נשלחה</h2>
 <p class="hint">נעדכן אותך במייל כשהבקשה תאושר.</p></section>
 <div id="appwrap" class="hid"><div class="layout"><div class="steps" id="steps"></div><div class="main">
@@ -311,10 +308,9 @@ $('#reset').onclick=()=>{if(!confirm('לאפס את כל הטקסטים לטקס
 /* ---- כניסה ושמירה בשרת ---- */
 const SB_URL='https://fdaixsvbzxwaqyjbaopy.supabase.co',SB_KEY='sb_publishable_r6dQ9CVqgXU0LJj_B0CWAw_6goNHgki';
 let sb,ME=null,ROW=null,booted=false;
-function showAuth(){document.body.classList.add('noapp');$('#auth').classList.remove('hid');$('#req').classList.remove('hid');$('#appwrap').classList.add('hid');$('#who').classList.add('hid')}
+function showAuth(){document.body.classList.add('noapp');$('#req').classList.remove('hid');$('#appwrap').classList.add('hid');$('#who').classList.add('hid')}
 function paintStatus(){
   $('#whoMail').textContent=ME.email;
-  const b=$('#badge');b.className='badge '+(ROW.approved?'ok':'wait');b.textContent=ROW.approved?'מאושרת':'ממתינה לאישור של מאיה';
   const st=$('#finStatus');
   st.textContent=ROW.approved?(ROW.slug?'הקישור ללקוחות פעיל. כל שינוי שתעשי מופיע בו מיד.':'הגישה שלך מאושרת. בחרי כתובת קצרה כדי לקבל קישור ללקוחות.'):'הבקשה שלך התקבלה. אפשר לערוך ולשמור כרגיל. הקישור ללקוחות יופעל אחרי שמאיה תאשר.';
   $('#slug').value=ROW.slug||'';
@@ -325,9 +321,8 @@ async function boot(session){
   if(!row){const r=await sb.from('coaches').insert({id:ME.id,email:ME.email}).select().single();row=r.data}
   ROW=row||{approved:false,content:{}};
   if(!ROW.approved){
-    document.body.classList.add('noapp');$('#auth').classList.add('hid');$('#req').classList.add('hid');$('#appwrap').classList.add('hid');
-    $('#whoMail').textContent=ME.email;$('#badge').className='badge wait';$('#badge').textContent='ממתינה לאישור של מאיה';
-    $('#who').classList.remove('hid');$('#wait').classList.remove('hid');
+    document.body.classList.add('noapp');$('#req').classList.add('hid');$('#appwrap').classList.add('hid');
+    $('#wait').classList.remove('hid');
     sb.from('coach_requests').insert({email:ME.email,name:''});
     return;
   }
@@ -335,16 +330,12 @@ async function boot(session){
   if(!cfg){const c=new URLSearchParams(location.search).get('c');if(c){try{cfg=await unpack(c)}catch(e){}}}
   if(cfg)loadFrom(cfg);
   else{try{const sv=JSON.parse(localStorage.getItem(KEY)||'null');if(sv){loadFrom({});Object.assign(V,sv)}else loadFrom({})}catch(e){loadFrom({})}}
-  document.body.classList.remove('noapp');$('#auth').classList.add('hid');$('#req').classList.add('hid');$('#appwrap').classList.remove('hid');$('#who').classList.remove('hid');
+  document.body.classList.remove('noapp');$('#req').classList.add('hid');$('#appwrap').classList.remove('hid');$('#who').classList.remove('hid');
   paintStatus();render();
+  history.replaceState(null,'',location.pathname+location.search);
+  window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),50);setTimeout(()=>window.scrollTo(0,0),400);
 }
-$('#authSend').onclick=async()=>{
-  const email=$('#authEmail').value.trim();if(!/^\S+@\S+\.\S+$/.test(email)){$('#authMsg').textContent='כתובת המייל לא תקינה.';return}
-  $('#authMsg').textContent='שולחת...';
-  const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:base0()}});
-  $('#authMsg').textContent=error?'לא הצלחנו לשלוח: '+error.message:'נשלח קישור אל '+email+'. פתחי אותו באותו מכשיר כדי להיכנס.';
-};
-function showSent(){$('#req').classList.add('hid');$('#auth').classList.add('hid');$('#wait').classList.remove('hid')}
+function showSent(){$('#req').classList.add('hid');$('#wait').classList.remove('hid')}
 async function sendReq(email,name,msgEl){
   const ok=/^\S+@\S+\.\S+$/.test(email);if(!ok){msgEl.textContent='כתובת המייל לא תקינה.';return false}
   const {error}=await sb.from('coach_requests').insert({email,name});
@@ -352,7 +343,6 @@ async function sendReq(email,name,msgEl){
   showSent();return true
 }
 $('#reqSend').onclick=()=>sendReq($('#reqEmail').value.trim(),$('#reqName').value.trim(),$('#reqMsg'));
-$('#signout').onclick=async()=>{await sb.auth.signOut();location.href=base0()};
 let slugT;
 $('#slug').addEventListener('input',()=>{
   clearTimeout(slugT);slugT=setTimeout(async()=>{
@@ -366,8 +356,16 @@ $('#slug').addEventListener('input',()=>{
 (async()=>{
   sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,detectSessionInUrl:true}});
   sb.auth.onAuthStateChange((ev,sess)=>{if(sess&&!booted)boot(sess)});
-  const {data}=await sb.auth.getSession();
-  if(data.session)await boot(data.session);else showAuth();
+  let {data}=await sb.auth.getSession();
+  const k=new URLSearchParams(location.search).get('k');
+  if(!data.session&&k){
+    try{
+      const r=await fetch(SB_URL+'/functions/v1/enter',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY},body:JSON.stringify({k})});
+      const j=await r.json();
+      if(j.token_hash){const v=await sb.auth.verifyOtp({token_hash:j.token_hash,type:'magiclink'});if(v.data&&v.data.session)data={session:v.data.session}}
+    }catch(e){}
+  }
+  if(data.session)await boot(data.session);else{showAuth();if(k)$('#reqMsg').textContent='הקישור הזה אינו פעיל. אפשר לשלוח בקשה חדשה כאן.'}
 })();
 </script>
 </body>
