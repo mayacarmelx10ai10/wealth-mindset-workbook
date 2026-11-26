@@ -49,7 +49,7 @@ section.hid,div.hid{display:none!important}
 body.noapp .bar,body.noapp .lead{display:none}
 body.noapp #who{display:none!important}
 .wrap{position:relative}
-.who{position:absolute;top:10px;left:2px;direction:ltr;font-size:15px;color:var(--mute);display:flex;gap:8px;align-items:center}
+.who{position:absolute;top:10px;left:2px;direction:ltr;font-size:15px;color:var(--mute);display:flex;flex-direction:column;gap:3px;align-items:flex-start}.wrow{display:flex;gap:10px;align-items:center}
 .badge{border-radius:99px;padding:3px 12px;font-size:14px;background:var(--sand);color:var(--ink)}
 .badge.ok{background:#DFF3E6}
 .badge.wait{background:#FFE9B8}
@@ -60,7 +60,7 @@ body.noapp #who{display:none!important}
 .urlrow input{border:0;border-radius:0;padding:10px 14px 10px 0;min-width:80px;flex:1;outline:none}
 .fullurl{font-size:16px;word-break:break-all;background:var(--sand);border-radius:10px;padding:10px 14px;margin:0;direction:ltr;text-align:left}
 .top{display:flex;gap:12px;align-items:center;justify-content:space-between;margin:0 0 6px}
-#saved{font-size:14px;color:var(--mute)}
+#saved{font-size:12px;color:var(--mute);min-height:15px;direction:rtl}
 #fin .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
 a{color:var(--ink)}
 .row{display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:22px;align-items:start}
@@ -76,7 +76,7 @@ a{color:var(--ink)}
 <div class="wrap">
 <h1>עריכת הטקסטים של ״אימון כלכלי - חוברת הכנה״</h1>
 <p class="lead">כאן משנים את כל הטקסטים, בלי לגעת בקוד. המבנה נשאר זהה: יעדים וחלומות, מטרות נוכחיות ומעגל החיים. בסוף מקבלים קישור אחד לשליחה ללקוחות. הטיוטה נשמרת אוטומטית במחשב הזה.</p>
-<div id="who" class="who hid"><span id="saved">נשמר אוטומטית</span> · <span id="whoMail"></span> · <button class="alt sm reset" id="reset">איפוס כל הטקסטים למקור</button></div>
+<div id="who" class="who hid"><div class="wrow"><span id="whoMail"></span><button class="alt sm reset" id="reset">איפוס כל הטקסטים למקור</button></div><div id="saved"></div></div>
 <section id="req"><div class="hint hid" id="linkMsg" style="margin:0 0 14px;padding:10px 12px;border:1px solid #d9b3b3;background:#fbf0f0;border-radius:8px"></div><h2>בקשת גישה לעורך</h2>
 <p class="hint">הגישה לעורך ניתנת באישור של מאיה. השאירי שם וכתובת מייל. כשהבקשה תאושר יישלח אלייך מייל עם כל מה שצריך כדי להתחיל.</p>
 <label for="reqName">שם</label><input id="reqName" type="text" autocomplete="name">
@@ -236,7 +236,7 @@ async function saveNow(){
   try{localStorage.setItem(KEY,JSON.stringify(V))}catch(e){}
   if(!ME)return;
   const {error}=await sb.from('coaches').update({content:build()}).eq('id',ME.id);
-  setSaved(error?'השמירה נכשלה. בדקי חיבור לאינטרנט.':'נשמר אוטומטית ב-'+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}));
+  setSaved(error?'השמירה נכשלה. בדקי חיבור לאינטרנט.':'נשמר ב-'+new Date().toLocaleTimeString('he-IL',{hour:'2-digit',minute:'2-digit'}));
 }
 function schedule(si){clearTimeout(timers[si]);timers[si]=setTimeout(()=>refresh(si),700);saveUrl()}
 /* הדגשת הרכיב בתצוגה המקדימה */
