@@ -115,13 +115,13 @@ const htmlToItem=h=>unbold(h).replace(/<small>/g,'\n').replace(/<\/small>/g,'').
 
 /* ---- הגדרת השדות ---- */
 const F=[
- {t:'התפריט העליון',a:'#top',h:'אפשר גם ללחוץ על הטקסט בתצוגה ולתקן אותו שם ישירות.',f:[['nav.0','פריט 1','line'],['nav.1','פריט 2','line'],['nav.2','פריט 3','line'],['nav.3','פריט 4','line'],['nav.4','פריט 5','line']]},
- {t:'ברוכים הבאים',a:'#welcome',h:'לפסקה חדשה משאירים שורה ריקה. הדגשה: **כך**.',f:[['welcome.h1','כותרת','line'],['ui.autosave','הודעת שמירה אוטומטית','line'],['welcome.lead','טקסט הפתיחה','paras'],['welcome.modeLabel','השאלה על אופן המילוי','line'],['ui.modeSingle','כפתור: מילוי ליחיד','line'],['ui.modeCouple','כפתור: מילוי כזוג','line']]},
- {t:'יעדים וחלומות',a:'#goals',f:[['goals.title','כותרת','line'],['goals.add','כיתוב כפתור ההוספה','line'],['goals.sub','הסבר מתחת לכותרת','area'],['goals.count','כמה יעדים להציג מראש','num'],['goals.first','היעד הראשון, מוכן מראש (אפשר להשאיר ריק)','line'],['ui.goalItem','כותרת כל יעד','line'],['ui.goalDesc','כיתוב שדה התיאור','line'],['ui.importance','כיתוב: חשיבות','line'],['ui.when','כיתוב: מתי','line'],['ui.cost','כיתוב: עלות','line'],['ui.hasSource','כיתוב: מקור כספי','line'],['ui.yes','כפתור: כן','line'],['ui.no','כפתור: לא','line'],['ui.addNote','כפתור: הוספת הערה','line']]},
- {t:'מטרות נוכחיות',a:'#current',f:[['current.titleSingle','כותרת','line'],['ui.topGoal','כותרת כל מטרה (לפני המספר)','line'],['ui.topName','כיתוב: שם המטרה','line'],['ui.topMoney','כיתוב: כמה כסף','line'],['current.howSingle','שאלה','line']]},
- {t:'מעגל החיים',a:'#wheel',h:'הדגשה: **כך**.',f:[['wheel.title','כותרת','line'],['wheel.sub','הסבר מתחת לכותרת','area'],['wheel.imp','הוראה: כמה חשוב','bold'],['wheel.cur','הוראה: מצב קיים','bold'],['ui.colArea','כותרת עמודה: תחום','line'],['ui.colImp','כותרת עמודה: כמה חשוב','line'],['ui.colCur','כותרת עמודה: מצב קיים','line'],['areas','התחומים בטבלה, תחום בכל שורה. הראשון הוא קבוע ואי אפשר לשנות אותו בחוברת. אפשר עד 14 תחומים, והלקוחות מוסיפים בעצמם.','areas'],['ui.gen','כפתור יצירת הגלגל','line'],['wheel.gapNote','הערה מתחת לתוצאות','area'],['wheel.key.0','תיבה צהובה: נקודה 1','area'],['wheel.key.1','תיבה צהובה: נקודה 2','area'],['wheel.keyNote','תיבה צהובה: טקסט סיום','area']]},
- {t:'סיכום ומה להכין לפגישה הבאה',a:'#summary',f:[['summary.title','כותרת','line'],['summary.single.0','שאלה 1','line'],['summary.single.1','שאלה 2','line'],['summary.single.2','שאלה 3','line'],['summary.prepTitle','כותרת "מה להכין"','line'],['summary.prepSub','הסבר','area'],['summary.prep.0','פריט 1 (שורות נוספות הופכות לשורות קטנות מתחתיו)','item'],['summary.prep.1','פריט 2','item'],['summary.prep.2','פריט 3','item'],['summary.prepNote','הערה בסוף','area']]},
- {t:'שמירה ושליחה',a:'#save',h:'אחרי שמילאת כתובת מייל, מופיע ללקוחות בסוף החוברת כפתור "שליחה אליך", שפותח מייל מוכן אליך עם הקישור למילוי שלהם.',f:[['ui.saveLink','כפתור: שמירה כקישור','line'],['ui.saveLinkCap','שורה מתחתיו','line'],['ui.savePdf','כפתור: שמירה כ-PDF','line'],['ui.savePdfCap','שורה מתחתיו','line'],['coach.email','כתובת המייל שלך','line'],['coach.label','כיתוב כפתור השליחה אליך','line'],['coach.cap','שורה מתחת לכפתור','line'],['coach.subject','נושא המייל','line'],['coach.body','פתיחת המייל','line']]}
+ {t:'התפריט העליון',a:'#top',h:'אפשר גם ללחוץ על הטקסט בתצוגה ולתקן אותו שם ישירות.',f:[['nav.0','פריט 1','lineb'],['nav.1','פריט 2','lineb'],['nav.2','פריט 3','lineb'],['nav.3','פריט 4','lineb'],['nav.4','פריט 5','lineb']]},
+ {t:'ברוכים הבאים',a:'#welcome',h:'לפסקה חדשה משאירים שורה ריקה. הדגשה: **כך**.',f:[['welcome.h1','כותרת','lineb'],['ui.autosave','הודעת שמירה אוטומטית','lineb'],['welcome.lead','טקסט הפתיחה','paras'],['welcome.modeLabel','השאלה על אופן המילוי','lineb'],['ui.modeSingle','כפתור: מילוי ליחיד','lineb'],['ui.modeCouple','כפתור: מילוי כזוג','lineb']]},
+ {t:'יעדים וחלומות',a:'#goals',f:[['goals.title','כותרת','lineb'],['goals.add','כיתוב כפתור ההוספה','lineb'],['goals.sub','הסבר מתחת לכותרת','area'],['goals.count','כמה יעדים להציג מראש','num'],['goals.first','היעד הראשון, מוכן מראש (אפשר להשאיר ריק)','line'],['ui.goalItem','כותרת כל יעד','lineb'],['ui.goalDesc','כיתוב שדה התיאור','lineb'],['ui.importance','כיתוב: חשיבות','lineb'],['ui.when','כיתוב: מתי','lineb'],['ui.cost','כיתוב: עלות','lineb'],['ui.hasSource','כיתוב: מקור כספי','lineb'],['ui.yes','כפתור: כן','line'],['ui.no','כפתור: לא','line'],['ui.addNote','כפתור: הוספת הערה','lineb']]},
+ {t:'מטרות נוכחיות',a:'#current',f:[['current.titleSingle','כותרת','line'],['ui.topGoal','כותרת כל מטרה (לפני המספר)','lineb'],['ui.topName','כיתוב: שם המטרה','lineb'],['ui.topMoney','כיתוב: כמה כסף','lineb'],['current.howSingle','שאלה','line']]},
+ {t:'מעגל החיים',a:'#wheel',h:'הדגשה: **כך**.',f:[['wheel.title','כותרת','lineb'],['wheel.sub','הסבר מתחת לכותרת','bold'],['wheel.imp','הוראה: כמה חשוב','bold'],['wheel.cur','הוראה: מצב קיים','bold'],['ui.colArea','כותרת עמודה: תחום','lineb'],['ui.colImp','כותרת עמודה: כמה חשוב','lineb'],['ui.colCur','כותרת עמודה: מצב קיים','lineb'],['areas','התחומים בטבלה, תחום בכל שורה. הראשון הוא קבוע ואי אפשר לשנות אותו בחוברת. אפשר עד 14 תחומים, והלקוחות מוסיפים בעצמם.','areas'],['ui.gen','כפתור יצירת הגלגל','lineb'],['wheel.gapNote','הערה מתחת לתוצאות','bold'],['wheel.key.0','תיבה צהובה: נקודה 1','bold'],['wheel.key.1','תיבה צהובה: נקודה 2','bold'],['wheel.keyNote','תיבה צהובה: טקסט סיום','bold']]},
+ {t:'סיכום ומה להכין לפגישה הבאה',a:'#summary',f:[['summary.title','כותרת','lineb'],['summary.single.0','שאלה 1','line'],['summary.single.1','שאלה 2','line'],['summary.single.2','שאלה 3','line'],['summary.prepTitle','כותרת "מה להכין"','lineb'],['summary.prepSub','הסבר','bold'],['summary.prep.0','פריט 1 (שורות נוספות הופכות לשורות קטנות מתחתיו)','item'],['summary.prep.1','פריט 2','item'],['summary.prep.2','פריט 3','item'],['summary.prepNote','הערה בסוף','bold']]},
+ {t:'שמירה ושליחה',a:'#save',h:'אחרי שמילאת כתובת מייל, מופיע ללקוחות בסוף החוברת כפתור "שליחה אליך", שפותח מייל מוכן אליך עם הקישור למילוי שלהם.',f:[['ui.saveLink','כפתור: שמירה כקישור','lineb'],['ui.saveLinkCap','שורה מתחתיו','lineb'],['ui.savePdf','כפתור: שמירה כ-PDF','lineb'],['ui.savePdfCap','שורה מתחתיו','lineb'],['coach.email','כתובת המייל שלך','line'],['coach.label','כיתוב כפתור השליחה אליך','line'],['coach.cap','שורה מתחת לכפתור','line'],['coach.subject','נושא המייל','line'],['coach.body','פתיחת המייל','line']]}
 ];
 window.EDITABLE=new Set(F.flatMap(s=>s.f.map(x=>x[0])).concat(['areas']));
 
@@ -133,7 +133,7 @@ let V={};
 function toText(type,val){
   if(val==null)return '';
   if(type==='paras')return htmlToParas(val);
-  if(type==='bold')return unbold(val);
+  if(type==='bold'||type==='lineb')return unbold(val);
   if(type==='item')return htmlToItem(val);
   if(type==='areas')return val.map(a=>a.name).join('\n');
   return String(val);
@@ -147,7 +147,7 @@ function build(){ // מחזיר רק מה ששונה מהמקור
   F.forEach(s=>s.f.forEach(([p,l,ty])=>{
     const txt=(V[p]||'');let val;
     if(ty==='paras')val=parasToHtml(txt);
-    else if(ty==='bold')val=bold(txt.trim());
+    else if(ty==='bold'||ty==='lineb')val=bold(txt.trim());
     else if(ty==='item')val=itemToHtml(txt);
     else if(ty==='num')val=Math.max(1,Math.min(20,parseInt(txt)||1));
     else if(ty==='areas'){
@@ -194,7 +194,7 @@ function render(){
   $('#form').innerHTML=F.map((s,si)=>`<section data-si="${si}"><div class="row"><div class="fields"><h2>${s.t}</h2>${s.h?`<p class="hint">${s.h}</p>`:''}`+s.f.map(([p,l,ty])=>{
     const v=esc(V[p]||'');
     const id='f_'+p.replace(/\./g,'_');
-    if(ty==='line'||ty==='num')return `<label for="${id}">${l}</label><input id="${id}" data-p="${p}" ${ty==='num'?'type="number" min="1" max="20"':'type="text"'} value="${v}">`;
+    if(ty==='line'||ty==='lineb'||ty==='num')return `<label for="${id}">${l}</label><input id="${id}" data-p="${p}" ${ty==='num'?'type="number" min="1" max="20"':'type="text"'} value="${v}">`;
     const rows=ty==='paras'?8:ty==='areas'?9:ty==='item'?3:3;
     return `<label for="${id}">${l}</label><textarea id="${id}" data-p="${p}" rows="${rows}">${v}</textarea>`;
   }).join('')+`</div><div class="pv"><div class="pvt"><i></i>איך זה ייראה בחוברת</div><iframe title="תצוגה מקדימה" data-si="${si}" loading="lazy"></iframe></div></div></section>`).join('');
@@ -219,7 +219,7 @@ addEventListener('message',e=>{
   const f=F.flatMap(x=>x.f).find(x=>x[0]===path);if(!f)return;
   const ty=f[2];let v;
   if(ty==='paras')v=htmlToParas(html);
-  else if(ty==='bold')v=unbold(html.replace(/<(?!\/?b>)[^>]+>/g,''));
+  else if(ty==='bold'||ty==='lineb')v=unbold(html.replace(/<(?!\/?b>)[^>]+>/g,'')).replace(/\s+/g,' ').trim();
   else if(ty==='item')v=htmlToItem(html);
   else v=text.replace(/\s+/g,' ').trim();
   V[path]=v;
