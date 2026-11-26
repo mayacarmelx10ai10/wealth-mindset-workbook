@@ -47,7 +47,7 @@ button.sm{font-size:15px;padding:7px 14px;font-weight:400}
 }
 section.hid,div.hid{display:none!important}
 body.noapp .bar,body.noapp .lead{display:none}
-body.noapp #who .badge{display:none}
+body.noapp #who{display:none!important}
 .who{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:16px;color:var(--mute);margin:6px 2px 0}
 .badge{border-radius:99px;padding:3px 12px;font-size:14px;background:var(--sand);color:var(--ink)}
 .badge.ok{background:#DFF3E6}
@@ -81,10 +81,8 @@ a{color:var(--ink)}
 <label for="authEmail">כתובת מייל</label><input id="authEmail" type="email" autocomplete="email" dir="ltr" style="text-align:left">
 <div class="btns" style="display:flex;gap:10px;margin-top:14px"><button id="authSend">שליחת קישור כניסה</button></div>
 <p class="hint" id="authMsg" style="margin-top:12px"></p></section>
-<section id="wait" class="hid"><h2>הבקשה שלך התקבלה</h2>
-<p class="hint">כשמאיה תאשר, יגיע אלייך מייל וכאן ייפתח העורך.</p>
-<div class="btns"><button class="alt" id="recheck">בדיקה מחדש</button></div>
-<p class="hint" id="waitMsg" style="margin-top:12px"></p></section>
+<section id="wait" class="hid"><h2>הבקשה שלך נשלחה</h2>
+<p class="hint">נעדכן אותך במייל כשהבקשה תאושר.</p></section>
 <div id="appwrap" class="hid"><div class="layout"><div class="steps" id="steps"></div><div class="main">
 <div id="form"></div>
 <section id="fin" class="hid"><h2>סיימנו. הקישור ללקוחות</h2>
@@ -346,17 +344,14 @@ $('#authSend').onclick=async()=>{
   const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:base0()}});
   $('#authMsg').textContent=error?'לא הצלחנו לשלוח: '+error.message:'נשלח קישור אל '+email+'. פתחי אותו באותו מכשיר כדי להיכנס.';
 };
+function showSent(){$('#req').classList.add('hid');$('#auth').classList.add('hid');$('#wait').classList.remove('hid')}
 async function sendReq(email,name,msgEl){
   const ok=/^\S+@\S+\.\S+$/.test(email);if(!ok){msgEl.textContent='כתובת המייל לא תקינה.';return false}
   const {error}=await sb.from('coach_requests').insert({email,name});
   if(error&&error.code!=='23505'){msgEl.textContent='השליחה נכשלה. נסי שוב.';return false}
-  msgEl.textContent=error?'כבר נשלחה בקשה על הכתובת הזאת. מחכים לאישור של מאיה.':'הבקשה נשלחה. כשתאושר יגיע אלייך מייל.';return true
+  showSent();return true
 }
 $('#reqSend').onclick=()=>sendReq($('#reqEmail').value.trim(),$('#reqName').value.trim(),$('#reqMsg'));
-$('#recheck').onclick=async()=>{
-  const {data}=await sb.from('coaches').select('approved').eq('id',ME.id).maybeSingle();
-  if(data&&data.approved){location.reload()}else{$('#waitMsg').textContent='עדיין לא אושר. נסי שוב מאוחר יותר.'}
-};
 $('#signout').onclick=async()=>{await sb.auth.signOut();location.href=base0()};
 let slugT;
 $('#slug').addEventListener('input',()=>{
