@@ -323,7 +323,7 @@ async function boot(session){
   if(!ROW.approved){
     document.body.classList.add('noapp');$('#req').classList.add('hid');$('#appwrap').classList.add('hid');
     $('#wait').classList.remove('hid');
-    sb.from('coach_requests').insert({email:ME.email,name:''});
+    sb.rpc('request_access',{p_email:ME.email,p_name:''});
     return;
   }
   let cfg=ROW.content&&Object.keys(ROW.content).length?ROW.content:null;
@@ -335,12 +335,12 @@ async function boot(session){
   history.replaceState(null,'',location.pathname+location.search);
   window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),50);setTimeout(()=>window.scrollTo(0,0),400);
 }
-function showSent(){$('#req').classList.add('hid');$('#wait').classList.remove('hid')}
+function showSent(st){const w=$('#wait');w.querySelector('h2').textContent=st==='approved'?'הכתובת הזאת כבר אושרה':'הבקשה שלך נשלחה';w.querySelector('p').textContent=st==='approved'?'שלחנו אליה שוב מייל עם הקישור לעורך.':'נעדכן אותך במייל כשהבקשה תאושר.';$('#req').classList.add('hid');$('#wait').classList.remove('hid')}
 async function sendReq(email,name,msgEl){
   const ok=/^\S+@\S+\.\S+$/.test(email);if(!ok){msgEl.textContent='כתובת המייל לא תקינה.';return false}
-  const {error}=await sb.from('coach_requests').insert({email,name});
-  if(error&&error.code!=='23505'){msgEl.textContent='השליחה נכשלה. נסי שוב.';return false}
-  showSent();return true
+  const {data,error}=await sb.rpc('request_access',{p_email:email,p_name:name});
+  if(error||data==='invalid'){msgEl.textContent='השליחה נכשלה. נסי שוב.';return false}
+  showSent(data);return true
 }
 $('#reqSend').onclick=()=>sendReq($('#reqEmail').value.trim(),$('#reqName').value.trim(),$('#reqMsg'));
 let slugT;
