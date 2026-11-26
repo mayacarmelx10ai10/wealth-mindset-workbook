@@ -529,8 +529,9 @@ function spy(){
   if(window.innerHeight+window.scrollY>=document.body.scrollHeight-4)cur=SEC.length-1;
   $$('#nav a').forEach((a,i)=>a.classList.toggle('on',i===cur));
   if(cur!==lastActive){lastActive=cur;
-    const nv=$('#nav'),a=$$('#nav a')[cur],mx=nv.scrollWidth-nv.clientWidth;
-    nv.scrollTo({left:Math.max(-mx,Math.min(0,a.offsetLeft+a.offsetWidth/2-nv.scrollWidth+nv.clientWidth/2)),behavior:'smooth'})}
+    const nv=$('#nav'),a=$$('#nav a')[cur];
+    const nr=nv.getBoundingClientRect(),ar=a.getBoundingClientRect();
+    nv.scrollBy({left:(ar.left+ar.width/2)-(nr.left+nr.width/2),behavior:'smooth'})}
   const max=document.body.scrollHeight-window.innerHeight;$('#bar i').style.width=(max>0?window.scrollY/max*100:0)+'%';
 }
 const setNav=()=>document.documentElement.style.setProperty('--navh',$('nav').offsetHeight+'px');
