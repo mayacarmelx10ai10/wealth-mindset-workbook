@@ -257,7 +257,14 @@ function highlight(fr,p){
     if(!d.getElementById('pvhl')){const st=d.createElement('style');st.id='pvhl';st.textContent='.pvhl{outline:3px solid #F5A623!important;outline-offset:5px;border-radius:10px;background:rgba(245,166,35,.12)!important}';d.head.appendChild(st)}
     d.querySelectorAll('.pvhl').forEach(x=>x.classList.remove('pvhl'));
     const el=d.querySelector(pvSelector(p));
-    if(el){const sh=d.querySelector('.sh');if(sh)sh.style.position='static';el.classList.add('pvhl');const w=fr.contentWindow;w.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+w.scrollY-(w.innerHeight-el.offsetHeight)/2)})}
+    if(el){const sh=d.querySelector('.sh');if(sh)sh.style.position='static';el.classList.add('pvhl');const w=fr.contentWindow;
+      const sec=fr.closest('section'),si=sec?+sec.dataset.si:-1,a=F[si]&&F[si].a;
+      const anc=a&&a!=='#top'?d.querySelector(a):null;
+      const base=anc?Math.max(0,anc.getBoundingClientRect().top+w.scrollY-12):0;
+      const r=el.getBoundingClientRect(),t0=r.top+w.scrollY,b0=t0+el.offsetHeight;
+      let top=base;
+      if(b0>base+w.innerHeight-16||t0<base)top=Math.max(0,t0-(w.innerHeight-el.offsetHeight)/2);
+      w.scrollTo({top})}
   }catch(e){}
 }
 document.addEventListener('focusin',e=>{const p=e.target.dataset&&e.target.dataset.p;if(!p)return;const sec=e.target.closest('section');if(!sec)return;const fr=sec.querySelector('iframe');lastFocus={p,fr};highlight(fr,p)});
