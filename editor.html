@@ -263,10 +263,11 @@ function highlight(fr,p){
     if(el){const sh=d.querySelector('.sh');if(sh)sh.style.position='static';el.classList.add('pvhl');const w=fr.contentWindow;
       const sec=fr.closest('section'),si=sec?+sec.dataset.si:-1,a=F[si]&&F[si].a;
       const anc=a&&a!=='#top'?d.querySelector(a):null;
-      const base=anc?Math.max(0,anc.getBoundingClientRect().top+w.scrollY-12):0;
+      const nh=(d.querySelector('nav')||{offsetHeight:0}).offsetHeight||0;
+      const base=anc?Math.max(0,anc.getBoundingClientRect().top+w.scrollY-nh-8):0;
       const r=el.getBoundingClientRect(),t0=r.top+w.scrollY,b0=t0+el.offsetHeight;
       let top=base;
-      if(b0>base+w.innerHeight-16||t0<base)top=Math.max(0,t0-(w.innerHeight-el.offsetHeight)/2);
+      if(b0>base+nh+w.innerHeight-16||t0<base+nh)top=Math.max(0,t0-(w.innerHeight-el.offsetHeight)/2);
       w.scrollTo({top});try{w.dispatchEvent(new Event('scroll'))}catch(e){}}
   }catch(e){}
 }
@@ -274,7 +275,8 @@ document.addEventListener('focusin',e=>{const p=e.target.dataset&&e.target.datas
 function placeAnchor(fr){
   try{const d=fr.contentDocument,w=fr.contentWindow,si=+fr.dataset.si,a=F[si]&&F[si].a;if(!d||!d.body)return;
     const anc=a&&a!=='#top'?d.querySelector(a):null;
-    w.scrollTo({top:anc?Math.max(0,anc.getBoundingClientRect().top+w.scrollY-12):0});w.dispatchEvent(new Event('scroll'))}catch(e){}
+    const nh=(d.querySelector('nav')||{offsetHeight:0}).offsetHeight||0;
+    w.scrollTo({top:anc?Math.max(0,anc.getBoundingClientRect().top+w.scrollY-nh-8):0});w.dispatchEvent(new Event('scroll'))}catch(e){}
 }
 document.addEventListener('load',e=>{if(e.target.tagName!=='IFRAME')return;const fr=e.target;
   [250,700,1500,3000].forEach(t=>setTimeout(()=>{if(lastFocus&&lastFocus.fr===fr)highlight(fr,lastFocus.p);else placeAnchor(fr)},t))},true);
