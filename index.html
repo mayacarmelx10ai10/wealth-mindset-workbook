@@ -13,8 +13,8 @@ window.VER=/^[a-z0-9_-]{1,40}$/.test(v)&&v!=='default'?v:'default';
 if(window.VER!=='default')document.write('<script src="versions/'+window.VER+'.js"><\/script>');})();
 </script>
 <style>
-:root{--bg:#FAF8F4;--hair:#E4DFD3;--sand:#EFE9DC;--sand-2:#F4F0E7;--ink:#14161B;--sky:#4D7CFF;--pink:#E2718A;--line:#E4DFD3;--mute:#5E5A52;
---violet-s:#DDD3FF;--sky-s:#BBD6FF;--pink-s:#FBD9E1;--sun-s:#FFE9B0;--amber:#F5A623;--amber-s:#FFF4DC;--blue-s:#E3ECFF}
+:root{--bg:#FAF8F4;--hair:#E4DFD3;--sand:#EFE9DC;--sand-2:#F4F0E7;--ink:#14161B;--sky:#6667AB;--pink:#E2718A;--line:#E4DFD3;--mute:#5E5A52;
+--violet-s:#DDD3FF;--sky-s:#BBD6FF;--pink-s:#FBD9E1;--sun-s:#FFE9B0;--amber:#53B0AE;--amber-s:#E0F1F0;--blue-s:#E6E6F3}
 *{box-sizing:border-box;margin:0;padding:0;font-family:Alef,sans-serif}
 i[class^="ri-"]{font-family:remixicon!important}
 body{background:var(--bg);color:var(--ink);line-height:1.65;font-size:18px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
@@ -383,8 +383,8 @@ function wheelSVG(p,f){
     // הפלח מתמלא רק בין שני המספרים (הטווח), לא מהמרכז
     if(imp&&cur&&Math.abs(imp-cur)>0.5){const top=gaps.includes(a);h+=`<path d="${ring(Math.min(imp,cur),Math.max(imp,cur),a0,a1)}" fill="${top?'#F6BFCC':'#DDD3FF'}"${top?' stroke="#E2718A" stroke-width="1"':''}/>`}
     // כל מספר הוא סימן (קשת) במקום שלו
-    if(imp)h+=`<path d="${ring(Math.max(imp-7,0),imp,a0,a1)}" fill="#F5A623"/>`;
-    if(cur)h+=`<path d="${ring(Math.max(cur-7,0),cur,a0,a1)}" fill="#4D7CFF"/>`;
+    if(imp)h+=`<path d="${ring(Math.max(imp-7,0),imp,a0,a1)}" fill="#53B0AE"/>`;
+    if(cur)h+=`<path d="${ring(Math.max(cur-7,0),cur,a0,a1)}" fill="#6667AB"/>`;
     const c=Math.cos(am),[lx,ly]=pt(R+16,am);
     h+=label(a.name,lx,ly,Math.abs(c)<.2?'middle':(c>0?'start':'end'),S.couple?25:17);
   });
