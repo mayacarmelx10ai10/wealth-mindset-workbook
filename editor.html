@@ -74,6 +74,10 @@ a{color:var(--ink)}
 <label for="authEmail">כתובת מייל</label><input id="authEmail" type="email" autocomplete="email" dir="ltr" style="text-align:left">
 <div class="btns" style="display:flex;gap:10px;margin-top:14px"><button id="authSend">שליחת קישור כניסה</button></div>
 <p class="hint" id="authMsg" style="margin-top:12px"></p></section>
+<section id="wait" class="hid"><h2>הבקשה שלך התקבלה</h2>
+<p class="hint">הגישה לעורך נפתחת אחרי שמאיה מאשרת אותך. זה לא לוקח הרבה זמן. אפשר לסגור את הדף ולחזור אחר כך עם אותה כתובת מייל.</p>
+<div class="btns"><button class="alt" id="recheck">בדיקה מחדש</button></div>
+<p class="hint" id="waitMsg" style="margin-top:12px"></p></section>
 <div id="appwrap" class="hid"><div class="layout"><div class="steps" id="steps"></div><div class="main">
 <div id="form"></div>
 <section id="fin" class="hid"><h2>סיימנו. הקישור ללקוחות</h2>
@@ -315,6 +319,12 @@ async function boot(session){
   let {data:row}=await sb.from('coaches').select('*').eq('id',ME.id).maybeSingle();
   if(!row){const r=await sb.from('coaches').insert({id:ME.id,email:ME.email}).select().single();row=r.data}
   ROW=row||{approved:false,content:{}};
+  if(!ROW.approved){
+    document.body.classList.add('noapp');$('#auth').classList.add('hid');$('#appwrap').classList.add('hid');
+    $('#whoMail').textContent=ME.email;$('#badge').className='badge wait';$('#badge').textContent='ממתינה לאישור של מאיה';
+    $('#who').classList.remove('hid');$('#wait').classList.remove('hid');
+    return;
+  }
   let cfg=ROW.content&&Object.keys(ROW.content).length?ROW.content:null;
   if(!cfg){const c=new URLSearchParams(location.search).get('c');if(c){try{cfg=await unpack(c)}catch(e){}}}
   if(cfg)loadFrom(cfg);
@@ -327,6 +337,10 @@ $('#authSend').onclick=async()=>{
   $('#authMsg').textContent='שולחת...';
   const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:base0()}});
   $('#authMsg').textContent=error?'לא הצלחנו לשלוח: '+error.message:'נשלח קישור אל '+email+'. פתחי אותו באותו מכשיר כדי להיכנס.';
+};
+$('#recheck').onclick=async()=>{
+  const {data}=await sb.from('coaches').select('approved').eq('id',ME.id).maybeSingle();
+  if(data&&data.approved){location.reload()}else{$('#waitMsg').textContent='עדיין לא אושר. נסי שוב מאוחר יותר.'}
 };
 $('#signout').onclick=async()=>{await sb.auth.signOut();location.href=base0()};
 let slugT;
