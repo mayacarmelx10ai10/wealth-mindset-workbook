@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>עריכת הטקסטים של החוברת</title>
+<title>עריכת הטקסטים של ״אימון כלכלי - חוברת הכנה״</title>
 <link href="https://fonts.googleapis.com/css2?family=Alef:wght@400;700&display=swap" rel="stylesheet">
 <script src="versions/default.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -257,7 +257,7 @@ function highlight(fr,p){
     if(!d.getElementById('pvhl')){const st=d.createElement('style');st.id='pvhl';st.textContent='.pvhl{outline:3px solid #F5A623!important;outline-offset:5px;border-radius:10px;background:rgba(245,166,35,.12)!important}';d.head.appendChild(st)}
     d.querySelectorAll('.pvhl').forEach(x=>x.classList.remove('pvhl'));
     const el=d.querySelector(pvSelector(p));
-    if(el){const sh=d.querySelector('.sh');if(sh)sh.style.position='static';el.classList.add('pvhl');el.scrollIntoView({block:'center'})}
+    if(el){const sh=d.querySelector('.sh');if(sh)sh.style.position='static';el.classList.add('pvhl');const w=fr.contentWindow;w.scrollTo({top:Math.max(0,el.getBoundingClientRect().top+w.scrollY-(w.innerHeight-el.offsetHeight)/2)})}
   }catch(e){}
 }
 document.addEventListener('focusin',e=>{const p=e.target.dataset&&e.target.dataset.p;if(!p)return;const sec=e.target.closest('section');if(!sec)return;const fr=sec.querySelector('iframe');lastFocus={p,fr};highlight(fr,p)});
