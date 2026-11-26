@@ -69,14 +69,20 @@ a{color:var(--ink)}
 <h1>עריכת הטקסטים של החוברת</h1>
 <p class="lead">כאן משנים את כל הטקסטים, בלי לגעת בקוד. המבנה נשאר זהה: יעדים וחלומות, מטרות נוכחיות ומעגל החיים. בסוף מקבלים קישור אחד לשליחה ללקוחות. הטיוטה נשמרת אוטומטית במחשב הזה.</p>
 <div id="who" class="who hid"><span id="whoMail"></span><span class="badge" id="badge"></span><button class="alt sm" id="signout">יציאה</button></div>
-<section id="auth"><h2>כניסה למאמנות</h2>
-<p class="hint">הזיני את כתובת המייל שלך ונשלח אליך קישור כניסה. בלי סיסמה. כל מה שתכתבי נשמר בחשבון שלך, ואפשר לחזור ולערוך בכל זמן.</p>
+<section id="req"><h2>בקשת גישה לעורך</h2>
+<p class="hint">הגישה לעורך ניתנת באישור של מאיה. השאירי שם וכתובת מייל. כשהבקשה תאושר יישלח אלייך מייל עם כל מה שצריך כדי להתחיל.</p>
+<label for="reqName">שם</label><input id="reqName" type="text" autocomplete="name">
+<label for="reqEmail" style="margin-top:10px">כתובת מייל</label><input id="reqEmail" type="email" autocomplete="email" dir="ltr" style="text-align:left">
+<div class="btns" style="display:flex;gap:10px;margin-top:14px"><button id="reqSend">שליחת בקשה</button></div>
+<p class="hint" id="reqMsg" style="margin-top:12px"></p></section>
+<section id="auth"><h2>כבר אושרת? כניסה</h2>
+<p class="hint">הזיני את כתובת המייל שאושרה ונשלח אליך קישור כניסה. בלי סיסמה.</p>
 <label for="authEmail">כתובת מייל</label><input id="authEmail" type="email" autocomplete="email" dir="ltr" style="text-align:left">
 <div class="btns" style="display:flex;gap:10px;margin-top:14px"><button id="authSend">שליחת קישור כניסה</button></div>
 <p class="hint" id="authMsg" style="margin-top:12px"></p></section>
-<section id="wait" class="hid"><h2>הבקשה שלך התקבלה</h2>
-<p class="hint">הגישה לעורך נפתחת אחרי שמאיה מאשרת אותך. זה לא לוקח הרבה זמן. אפשר לסגור את הדף ולחזור אחר כך עם אותה כתובת מייל.</p>
-<div class="btns"><button class="alt" id="recheck">בדיקה מחדש</button></div>
+<section id="wait" class="hid"><h2>הגישה עוד לא אושרה</h2>
+<p class="hint">הגישה לעורך נפתחת אחרי שמאיה מאשרת בקשה על הכתובת הזאת. אם עוד לא שלחת בקשה, אפשר לשלוח עכשיו. אחרי האישור יגיע אלייך מייל.</p>
+<div class="btns"><button id="waitReq">שליחת בקשת גישה</button><button class="alt" id="recheck">בדיקה מחדש</button></div>
 <p class="hint" id="waitMsg" style="margin-top:12px"></p></section>
 <div id="appwrap" class="hid"><div class="layout"><div class="steps" id="steps"></div><div class="main">
 <div id="form"></div>
@@ -306,7 +312,7 @@ $('#reset').onclick=()=>{if(!confirm('לאפס את כל הטקסטים לטקס
 /* ---- כניסה ושמירה בשרת ---- */
 const SB_URL='https://fdaixsvbzxwaqyjbaopy.supabase.co',SB_KEY='sb_publishable_r6dQ9CVqgXU0LJj_B0CWAw_6goNHgki';
 let sb,ME=null,ROW=null,booted=false;
-function showAuth(){document.body.classList.add('noapp');$('#auth').classList.remove('hid');$('#appwrap').classList.add('hid');$('#who').classList.add('hid')}
+function showAuth(){document.body.classList.add('noapp');$('#auth').classList.remove('hid');$('#req').classList.remove('hid');$('#appwrap').classList.add('hid');$('#who').classList.add('hid')}
 function paintStatus(){
   $('#whoMail').textContent=ME.email;
   const b=$('#badge');b.className='badge '+(ROW.approved?'ok':'wait');b.textContent=ROW.approved?'מאושרת':'ממתינה לאישור של מאיה';
@@ -320,7 +326,7 @@ async function boot(session){
   if(!row){const r=await sb.from('coaches').insert({id:ME.id,email:ME.email}).select().single();row=r.data}
   ROW=row||{approved:false,content:{}};
   if(!ROW.approved){
-    document.body.classList.add('noapp');$('#auth').classList.add('hid');$('#appwrap').classList.add('hid');
+    document.body.classList.add('noapp');$('#auth').classList.add('hid');$('#req').classList.add('hid');$('#appwrap').classList.add('hid');
     $('#whoMail').textContent=ME.email;$('#badge').className='badge wait';$('#badge').textContent='ממתינה לאישור של מאיה';
     $('#who').classList.remove('hid');$('#wait').classList.remove('hid');
     return;
@@ -329,7 +335,7 @@ async function boot(session){
   if(!cfg){const c=new URLSearchParams(location.search).get('c');if(c){try{cfg=await unpack(c)}catch(e){}}}
   if(cfg)loadFrom(cfg);
   else{try{const sv=JSON.parse(localStorage.getItem(KEY)||'null');if(sv){loadFrom({});Object.assign(V,sv)}else loadFrom({})}catch(e){loadFrom({})}}
-  document.body.classList.remove('noapp');$('#auth').classList.add('hid');$('#appwrap').classList.remove('hid');$('#who').classList.remove('hid');
+  document.body.classList.remove('noapp');$('#auth').classList.add('hid');$('#req').classList.add('hid');$('#appwrap').classList.remove('hid');$('#who').classList.remove('hid');
   paintStatus();render();
 }
 $('#authSend').onclick=async()=>{
@@ -338,6 +344,14 @@ $('#authSend').onclick=async()=>{
   const {error}=await sb.auth.signInWithOtp({email,options:{emailRedirectTo:base0()}});
   $('#authMsg').textContent=error?'לא הצלחנו לשלוח: '+error.message:'נשלח קישור אל '+email+'. פתחי אותו באותו מכשיר כדי להיכנס.';
 };
+async function sendReq(email,name,msgEl){
+  const ok=/^\S+@\S+\.\S+$/.test(email);if(!ok){msgEl.textContent='כתובת המייל לא תקינה.';return false}
+  const {error}=await sb.from('coach_requests').insert({email,name});
+  if(error&&error.code!=='23505'){msgEl.textContent='השליחה נכשלה. נסי שוב.';return false}
+  msgEl.textContent=error?'כבר נשלחה בקשה על הכתובת הזאת. מחכים לאישור של מאיה.':'הבקשה נשלחה. כשתאושר יגיע אלייך מייל.';return true
+}
+$('#reqSend').onclick=()=>sendReq($('#reqEmail').value.trim(),$('#reqName').value.trim(),$('#reqMsg'));
+$('#waitReq').onclick=()=>sendReq(ME.email,'',$('#waitMsg'));
 $('#recheck').onclick=async()=>{
   const {data}=await sb.from('coaches').select('approved').eq('id',ME.id).maybeSingle();
   if(data&&data.approved){location.reload()}else{$('#waitMsg').textContent='עדיין לא אושר. נסי שוב מאוחר יותר.'}
