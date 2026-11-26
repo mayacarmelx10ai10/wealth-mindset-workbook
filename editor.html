@@ -46,7 +46,8 @@ button.sm{font-size:15px;padding:7px 14px;font-weight:400}
   .steps button{flex:none;width:auto;border-radius:99px;padding:9px 16px 9px 12px;font-size:16px}
 }
 section.hid,div.hid{display:none!important}
-body.noapp .bar{display:none}
+body.noapp .bar,body.noapp .lead{display:none}
+body.noapp #who .badge{display:none}
 .who{display:flex;gap:10px;align-items:center;flex-wrap:wrap;font-size:16px;color:var(--mute);margin:6px 2px 0}
 .badge{border-radius:99px;padding:3px 12px;font-size:14px;background:var(--sand);color:var(--ink)}
 .badge.ok{background:#DFF3E6}
@@ -80,9 +81,9 @@ a{color:var(--ink)}
 <label for="authEmail">כתובת מייל</label><input id="authEmail" type="email" autocomplete="email" dir="ltr" style="text-align:left">
 <div class="btns" style="display:flex;gap:10px;margin-top:14px"><button id="authSend">שליחת קישור כניסה</button></div>
 <p class="hint" id="authMsg" style="margin-top:12px"></p></section>
-<section id="wait" class="hid"><h2>הגישה עוד לא אושרה</h2>
-<p class="hint">הגישה לעורך נפתחת אחרי שמאיה מאשרת בקשה על הכתובת הזאת. אם עוד לא שלחת בקשה, אפשר לשלוח עכשיו. אחרי האישור יגיע אלייך מייל.</p>
-<div class="btns"><button id="waitReq">שליחת בקשת גישה</button><button class="alt" id="recheck">בדיקה מחדש</button></div>
+<section id="wait" class="hid"><h2>הבקשה שלך התקבלה</h2>
+<p class="hint">כשמאיה תאשר, יגיע אלייך מייל וכאן ייפתח העורך.</p>
+<div class="btns"><button class="alt" id="recheck">בדיקה מחדש</button></div>
 <p class="hint" id="waitMsg" style="margin-top:12px"></p></section>
 <div id="appwrap" class="hid"><div class="layout"><div class="steps" id="steps"></div><div class="main">
 <div id="form"></div>
@@ -329,6 +330,7 @@ async function boot(session){
     document.body.classList.add('noapp');$('#auth').classList.add('hid');$('#req').classList.add('hid');$('#appwrap').classList.add('hid');
     $('#whoMail').textContent=ME.email;$('#badge').className='badge wait';$('#badge').textContent='ממתינה לאישור של מאיה';
     $('#who').classList.remove('hid');$('#wait').classList.remove('hid');
+    sb.from('coach_requests').insert({email:ME.email,name:''});
     return;
   }
   let cfg=ROW.content&&Object.keys(ROW.content).length?ROW.content:null;
@@ -351,7 +353,6 @@ async function sendReq(email,name,msgEl){
   msgEl.textContent=error?'כבר נשלחה בקשה על הכתובת הזאת. מחכים לאישור של מאיה.':'הבקשה נשלחה. כשתאושר יגיע אלייך מייל.';return true
 }
 $('#reqSend').onclick=()=>sendReq($('#reqEmail').value.trim(),$('#reqName').value.trim(),$('#reqMsg'));
-$('#waitReq').onclick=()=>sendReq(ME.email,'',$('#waitMsg'));
 $('#recheck').onclick=async()=>{
   const {data}=await sb.from('coaches').select('approved').eq('id',ME.id).maybeSingle();
   if(data&&data.approved){location.reload()}else{$('#waitMsg').textContent='עדיין לא אושר. נסי שוב מאוחר יותר.'}
