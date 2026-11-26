@@ -383,9 +383,10 @@ $('#slug').addEventListener('input',()=>{paintUrl();
 });
 (async()=>{
   sb=supabase.createClient(SB_URL,SB_KEY,{auth:{persistSession:true,detectSessionInUrl:true}});
-  sb.auth.onAuthStateChange((ev,sess)=>{if(sess&&!booted)boot(sess)});
-  let {data}=await sb.auth.getSession();
   const k=new URLSearchParams(location.search).get('k');
+  sb.auth.onAuthStateChange((ev,sess)=>{if(sess&&!booted&&!k)boot(sess)});
+  if(k)try{await sb.auth.signOut({scope:'local'})}catch(e){}
+  let {data}=await sb.auth.getSession();
   let why='';
   if(!data.session&&k){
     try{
