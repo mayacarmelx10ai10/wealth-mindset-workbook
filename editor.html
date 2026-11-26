@@ -392,7 +392,7 @@ $('#slug').addEventListener('input',()=>{paintUrl();
     try{
       const r=await fetch(SB_URL+'/functions/v1/enter',{method:'POST',headers:{'Content-Type':'application/json',apikey:SB_KEY},body:JSON.stringify({k})});
       const j=await r.json().catch(()=>({}));
-      if(j.token_hash){const v=await sb.auth.verifyOtp({token_hash:j.token_hash,type:'magiclink'});if(v.data&&v.data.session)data={session:v.data.session};else why='verify:'+((v.error&&v.error.message)||'none')}
+      if(j.token_hash){const v=await sb.auth.verifyOtp({token_hash:j.token_hash,type:j.type||'magiclink'});if(v.data&&v.data.session)data={session:v.data.session};else why='verify:'+((v.error&&v.error.message)||'none')}
       else why='enter:'+r.status+':'+(j.error||'')
     }catch(e){why='net:'+e.message}
   }
