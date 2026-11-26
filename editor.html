@@ -264,11 +264,11 @@ function highlight(fr,p){
       const r=el.getBoundingClientRect(),t0=r.top+w.scrollY,b0=t0+el.offsetHeight;
       let top=base;
       if(b0>base+w.innerHeight-16||t0<base)top=Math.max(0,t0-(w.innerHeight-el.offsetHeight)/2);
-      w.scrollTo({top})}
+      w.scrollTo({top});try{w.dispatchEvent(new Event('scroll'))}catch(e){}}
   }catch(e){}
 }
-document.addEventListener('focusin',e=>{const p=e.target.dataset&&e.target.dataset.p;if(!p)return;const sec=e.target.closest('section');if(!sec)return;const fr=sec.querySelector('iframe');lastFocus={p,fr};highlight(fr,p)});
-document.addEventListener('load',e=>{if(e.target.tagName==='IFRAME'&&lastFocus&&lastFocus.fr===e.target)[250,700,1500].forEach(t=>setTimeout(()=>highlight(e.target,lastFocus.p),t))},true);
+document.addEventListener('focusin',e=>{const p=e.target.dataset&&e.target.dataset.p;if(!p)return;const sec=e.target.closest('section');if(!sec)return;const fr=sec.querySelector('iframe');lastFocus={p,fr};highlight(fr,p);[500,1400,3000].forEach(t=>setTimeout(()=>{if(lastFocus&&lastFocus.p===p)highlight(fr,p)},t))});
+document.addEventListener('load',e=>{if(e.target.tagName==='IFRAME'&&lastFocus&&lastFocus.fr===e.target)[250,700,1500,3000].forEach(t=>setTimeout(()=>highlight(e.target,lastFocus.p),t))},true);
 document.addEventListener('input',e=>{const p=e.target.dataset&&e.target.dataset.p;if(!p)return;V[p]=e.target.value;try{localStorage.setItem(KEY,JSON.stringify(V))}catch(x){}const sec=e.target.closest('section');if(sec){const fr=sec.querySelector('iframe');if(fr)lastFocus={p,fr};schedule(+sec.dataset.si)}});
 
 /* ---- קישור ---- */
