@@ -124,7 +124,7 @@ const F=[
  {t:'מטרות נוכחיות',a:'#current',f:[['current.titleSingle','כותרת','line'],['ui.topGoal','כותרת כל מטרה (לפני המספר)','lineb'],['ui.topName','כיתוב: שם המטרה','lineb'],['ui.topMoney','כיתוב: כמה כסף','lineb'],['current.howSingle','שאלה','line']]},
  {t:'מעגל החיים',a:'#wheel',h:'הדגשה: **כך**.',f:[['wheel.title','כותרת','lineb'],['wheel.sub','הסבר מתחת לכותרת','bold'],['wheel.imp','הוראה: כמה חשוב','bold'],['wheel.cur','הוראה: מצב קיים','bold'],['ui.colArea','כותרת עמודה: תחום','lineb'],['ui.colImp','כותרת עמודה: כמה חשוב','lineb'],['ui.colCur','כותרת עמודה: מצב קיים','lineb'],['areas','התחומים בטבלה, תחום בכל שורה. הראשון הוא קבוע ואי אפשר לשנות אותו בחוברת. אפשר עד 14 תחומים, והלקוחות מוסיפים בעצמם.','areas'],['ui.gen','כפתור יצירת הגלגל','lineb'],['wheel.gapNote','הערה מתחת לתוצאות','bold'],['wheel.key.0','תיבה צהובה: נקודה 1','bold'],['wheel.key.1','תיבה צהובה: נקודה 2','bold'],['wheel.keyNote','תיבה צהובה: טקסט סיום','bold']]},
  {t:'סיכום ומה להכין לפגישה הבאה',a:'#summary',f:[['summary.title','כותרת','lineb'],['summary.single.0','שאלה 1','line'],['summary.single.1','שאלה 2','line'],['summary.single.2','שאלה 3','line'],['summary.prepTitle','כותרת "מה להכין"','lineb'],['summary.prepSub','הסבר','bold'],['summary.prep.0','פריט 1 (שורות נוספות הופכות לשורות קטנות מתחתיו)','item'],['summary.prep.1','פריט 2','item'],['summary.prep.2','פריט 3','item'],['summary.prepNote','הערה בסוף','bold']]},
- {t:'שמירה ושליחה',a:'#save',h:'אחרי שמילאת כתובת מייל, מופיע ללקוחות בסוף החוברת כפתור "שליחה אליך", שפותח מייל מוכן אליך עם הקישור למילוי שלהם.',f:[['ui.saveLink','כפתור: שמירה כקישור','lineb'],['ui.saveLinkCap','שורה מתחתיו','lineb'],['ui.savePdf','כפתור: שמירה כ-PDF','lineb'],['ui.savePdfCap','שורה מתחתיו','lineb'],['coach.email','כתובת המייל שלך','line'],['coach.label','כיתוב כפתור השליחה אליך','line'],['coach.cap','שורה מתחת לכפתור','line'],['coach.subject','נושא המייל','line'],['coach.body','פתיחת המייל','line']]}
+ {t:'שמירה ושליחה',a:'#save',h:'בסוף החוברת מופיע ללקוחות כפתור "שליחה אליך", שפותח מייל מוכן אליך עם הקישור למילוי שלהם. הכתובת מולאה אוטומטית ממייל ההרשמה שלך, ואפשר לשנות אותה.',f:[['ui.saveLink','כפתור: שמירה כקישור','lineb'],['ui.saveLinkCap','שורה מתחתיו','lineb'],['ui.savePdf','כפתור: שמירה כ-PDF','lineb'],['ui.savePdfCap','שורה מתחתיו','lineb'],['coach.email','כתובת המייל שלך','line'],['coach.label','כיתוב כפתור השליחה אליך','line'],['coach.cap','שורה מתחת לכפתור','line'],['coach.subject','נושא המייל','line'],['coach.body','פתיחת המייל','line']]}
 ];
 window.EDITABLE=new Set(F.flatMap(s=>s.f.map(x=>x[0])).concat(['areas']));
 
@@ -358,6 +358,7 @@ async function boot(session){
   if(!cfg){const c=new URLSearchParams(location.search).get('c');if(c){try{cfg=await unpack(c)}catch(e){}}}
   if(cfg)loadFrom(cfg);
   else{try{const sv=JSON.parse(localStorage.getItem(KEY)||'null');if(sv){loadFrom({});Object.assign(V,sv)}else loadFrom({})}catch(e){loadFrom({})}}
+  if(!V['coach.email'])V['coach.email']=ME.email; // כתובת המאמנת היא מייל ההרשמה, אלא אם שינתה
   document.body.classList.remove('noapp');$('#req').classList.add('hid');$('#appwrap').classList.remove('hid');$('#who').classList.remove('hid');
   paintStatus();render();
   history.replaceState(null,'',location.pathname+location.search);
