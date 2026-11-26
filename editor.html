@@ -303,12 +303,29 @@ async function makeLink(){
 const say=t=>{$('#msg').textContent=t};
 const base0=()=>location.href.split('#')[0].split('?')[0];
 const clientLink=()=>ROW&&ROW.approved&&ROW.slug?base0().replace(/[^/]*$/,'')+'?b='+ROW.slug:'';
+const SLUG_RE=/^[a-z0-9][a-z0-9-]{2,29}$/;
+async function ensureSlug(){ // שומר את הכתובת שהוקלדה אם צריך, ומחזיר את הקישור המלא או ''
+  const m=$('#slugMsg'),v=$('#slug').value.trim().toLowerCase();
+  if(!SLUG_RE.test(v)){m.textContent='כתבי את סוף הכתובת: 3 עד 30 תווים, אותיות באנגלית, מספרים ומקף.';$('#slug').focus();return ''}
+  if(ROW.slug!==v){
+    const {error}=await sb.from('coaches').update({slug:v}).eq('id',ME.id);
+    if(error){m.textContent=error.code==='23505'?'הכתובת הזאת תפוסה. בחרי אחרת.':'לא נשמר: '+error.message;return ''}
+    ROW.slug=v;m.textContent='נשמר.';
+  }
+  return slugBase()+v;
+}
+function flash(btn,t){const o=btn.dataset.o||btn.textContent;btn.dataset.o=o;btn.textContent=t;clearTimeout(btn._t);btn._t=setTimeout(()=>{btn.textContent=o},2200)}
 $('#copy').onclick=async()=>{
-  const url=clientLink();
-  if(!url){say(ROW&&ROW.approved?'בחרי קודם כתובת קצרה.':'הקישור יופעל אחרי שמאיה תאשר את הגישה שלך.');return}
-  try{await navigator.clipboard.writeText(url);say('הקישור הועתק. שלחו אותו ללקוחות, למשל ב-WhatsApp או במייל.')}catch(e){prompt('העתיקו את הקישור:',url)}
+  const btn=$('#copy');
+  if(!ROW||!ROW.approved){$('#slugMsg').textContent='הקישור יופעל אחרי שמאיה תאשר את הגישה שלך.';return}
+  const url=await ensureSlug();if(!url)return;
+  let ok=false;
+  try{await navigator.clipboard.writeText(url);ok=true}catch(e){}
+  if(!ok){try{const t=document.createElement('textarea');t.value=url;t.style.position='fixed';t.style.opacity='0';document.body.appendChild(t);t.select();ok=document.execCommand('copy');t.remove()}catch(e){}}
+  if(ok){flash(btn,'הקישור הועתק');$('#slugMsg').textContent='הקישור הועתק. אפשר להדביק ולשלוח ללקוחות, למשל ב-WhatsApp או במייל.'}
+  else prompt('העתיקו את הקישור:',url);
 };
-$('#open').onclick=async()=>{window.open(clientLink()||await makeLink(),'_blank')};
+$('#open').onclick=async()=>{const url=await ensureSlug();if(url)window.open(url,'_blank')};
 $('#prev').onclick=()=>showStep(STEP-1);
 $('#next').onclick=()=>showStep(STEP+1);
 $('#reset').onclick=()=>{if(!confirm('לאפס את כל הטקסטים לטקסטים המקוריים?'))return;try{localStorage.removeItem(KEY)}catch(e){}loadFrom({});render();showStep(STEP);saveNow();say('הטקסטים אופסו.')};
