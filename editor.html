@@ -335,7 +335,7 @@ async function boot(session){
   history.replaceState(null,'',location.pathname+location.search);
   window.scrollTo(0,0);setTimeout(()=>window.scrollTo(0,0),50);setTimeout(()=>window.scrollTo(0,0),400);
 }
-function showSent(st){const w=$('#wait');w.querySelector('h2').textContent=st==='approved'?'הכתובת הזאת כבר אושרה':'הבקשה שלך נשלחה';w.querySelector('p').textContent=st==='approved'?'שלחנו אליה שוב מייל עם הקישור לעורך.':'נעדכן אותך במייל כשהבקשה תאושר.';$('#req').classList.add('hid');$('#wait').classList.remove('hid')}
+function showSent(st){const w=$('#wait');const T={approved:['הכתובת הזאת כבר אושרה','שלחנו אליה שוב מייל עם הקישור לעורך.'],pending:['הבקשה כבר נשלחה','היא ממתינה לאישור. נעדכן אותך במייל כשתאושר.']}[st]||['הבקשה שלך נשלחה','נעדכן אותך במייל כשהבקשה תאושר.'];w.querySelector('h2').textContent=T[0];w.querySelector('p').textContent=T[1];$('#req').classList.add('hid');$('#wait').classList.remove('hid')}
 async function sendReq(email,name,msgEl){
   const ok=/^\S+@\S+\.\S+$/.test(email);if(!ok){msgEl.textContent='כתובת המייל לא תקינה.';return false}
   const {data,error}=await sb.rpc('request_access',{p_email:email,p_name:name});
