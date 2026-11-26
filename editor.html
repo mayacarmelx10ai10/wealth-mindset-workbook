@@ -205,12 +205,13 @@ function render(){
   showStep(st);
 }
 /* ---- תצוגה מקדימה חיה ליד כל אזור ---- */
+const PV=Date.now();
 const timers={};
 let lastFocus=null;
 async function refresh(si){
   const fr=document.querySelector('iframe[data-si="'+si+'"]');if(!fr)return;
   const url=await makeLink();
-  const next=url+(url.includes('?')?'&':'?')+'p='+si+F[si].a;
+  const next=url+(url.includes('?')?'&':'?')+'p='+si+'&_v='+PV+F[si].a;
   fr.src=next;
 }
 const refreshAll=()=>F.forEach((_,i)=>refresh(i));
